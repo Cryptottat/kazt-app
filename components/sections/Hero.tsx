@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { features } from "@/lib/features";
 
 const ForgeScene = dynamic(() => import("@/components/three/ForgeScene"), {
   ssr: false,
@@ -79,18 +80,26 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="mt-10 flex flex-col sm:flex-row gap-4">
-          <Link
-            href="/forge"
-            className="cursor-hammer px-8 py-3.5 bg-forge-orange text-white font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange-light transition-all duration-200 hover:shadow-[0_0_30px_rgba(249,115,22,0.4)] active:scale-95"
-          >
-            Launch Forge
-          </Link>
-          <a
-            href="#token"
-            className="cursor-hammer px-8 py-3.5 border border-wire-border-hover text-text-primary font-display uppercase tracking-wider text-sm rounded hover:border-forge-orange hover:text-forge-orange transition-all duration-200 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)]"
-          >
-            Buy $KAZT
-          </a>
+          {features.forge ? (
+            <Link
+              href="/forge"
+              className="cursor-hammer px-8 py-3.5 bg-forge-orange text-white font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange-light transition-all duration-200 hover:shadow-[0_0_30px_rgba(249,115,22,0.4)] active:scale-95"
+            >
+              Launch Forge
+            </Link>
+          ) : (
+            <span className="px-8 py-3.5 border border-wire-border text-text-muted font-display uppercase tracking-wider text-sm rounded cursor-default">
+              Coming Soon
+            </span>
+          )}
+          {features.showTokenInfo && (
+            <a
+              href="#token"
+              className="cursor-hammer px-8 py-3.5 border border-wire-border-hover text-text-primary font-display uppercase tracking-wider text-sm rounded hover:border-forge-orange hover:text-forge-orange transition-all duration-200 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)]"
+            >
+              Buy $KAZT
+            </a>
+          )}
         </div>
 
         {/* Scroll indicator */}

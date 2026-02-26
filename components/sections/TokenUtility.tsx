@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { features } from "@/lib/features";
+
+// 프로젝트 CA가 존재하면 실제 DEX 링크 생성
+const PROJECT_CA = process.env.NEXT_PUBLIC_PROJECT_CA ?? "";
+const raydiumHref = PROJECT_CA
+  ? `https://raydium.io/swap/?inputMint=sol&outputMint=${PROJECT_CA}`
+  : "#";
 
 interface Tier {
   name: string;
@@ -87,6 +94,9 @@ const TIERS: Tier[] = [
 
 export default function TokenUtility() {
   const [activeTier, setActiveTier] = useState(2); // Pro highlighted by default
+
+  // Phase 1: 토큰 정보 비공개 상태면 렌더링하지 않음
+  if (!features.showTokenInfo) return null;
 
   return (
     <section id="token" className="relative py-24 sm:py-32 px-4 overflow-hidden">
@@ -181,7 +191,9 @@ export default function TokenUtility() {
         {/* Bottom CTA */}
         <div className="mt-12 text-center">
           <a
-            href="#"
+            href={raydiumHref}
+            target={PROJECT_CA ? "_blank" : undefined}
+            rel={PROJECT_CA ? "noopener noreferrer" : undefined}
             className="cursor-hammer inline-block px-8 py-3 border border-forge-orange text-forge-orange font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange hover:text-white transition-all duration-200 hover:shadow-[0_0_30px_rgba(249,115,22,0.3)]"
           >
             Get $KAZT on Raydium

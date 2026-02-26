@@ -24,6 +24,7 @@ import BlockPalette from "@/components/forge/BlockPalette";
 import PropertiesPanel from "@/components/forge/PropertiesPanel";
 import SimulationPanel from "@/components/forge/SimulationPanel";
 import { useForgeStore } from "@/lib/store";
+import { features } from "@/lib/features";
 
 const DEFAULT_PARAMS: Record<RuleBlockType, Record<string, unknown>> = {
   ordering: { method: "FIFO", tiebreaker: "timestamp" },
@@ -227,6 +228,29 @@ export default function ForgePage() {
   const simResults = simulationResults as { results?: unknown[] } | null;
   const simCount = simResults?.results?.length ?? 0;
 
+  // Phase 2: forge 비활성 시 커밍순 화면 표시
+  if (!features.forge) {
+    return (
+      <div className="h-screen flex flex-col bg-bg">
+        <Header />
+        <div className="flex-1 flex flex-col items-center justify-center px-4 mt-16">
+          <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase tracking-wider text-text-primary">
+            Rule Forge
+          </h1>
+          <p className="mt-4 text-text-secondary text-lg">
+            Coming Soon
+          </p>
+          <a
+            href="/"
+            className="mt-8 px-8 py-3 border border-forge-orange text-forge-orange font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange hover:text-white transition-all duration-200"
+          >
+            Back to Home
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col bg-bg cursor-crosshair">
       <Header />
@@ -263,8 +287,13 @@ export default function ForgePage() {
           Export JSON
         </button>
         <button
-          className="px-3 py-1.5 text-xs font-display uppercase tracking-wider border border-wire-border text-text-muted rounded cursor-not-allowed opacity-50"
-          title="Pro+ only"
+          className={`px-3 py-1.5 text-xs font-display uppercase tracking-wider border border-wire-border rounded transition-colors ${
+            features.deploy
+              ? "text-text-secondary hover:border-forge-orange hover:text-forge-orange cursor-hammer"
+              : "text-text-muted cursor-not-allowed opacity-50"
+          }`}
+          disabled={!features.deploy}
+          title={features.deploy ? "Export Anchor IDL" : "Pro+ only"}
         >
           Export Anchor
         </button>

@@ -3,6 +3,7 @@ import Hero from "@/components/sections/Hero";
 import HowItWorks from "@/components/sections/HowItWorks";
 import TokenUtility from "@/components/sections/TokenUtility";
 import Footer from "@/components/common/Footer";
+import { features } from "@/lib/features";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
       <Header />
       <Hero />
       <HowItWorks />
-      <TokenUtility />
+      {features.showTokenInfo && <TokenUtility />}
       <Footer />
     </main>
   );

@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { features } from "@/lib/features";
 
+// 피처 플래그에 따라 필터링되는 네비게이션 링크
 const NAV_LINKS = [
-  { href: "/forge", label: "Forge" },
-  { href: "/templates", label: "Templates" },
-  { href: "/docs", label: "Docs" },
-];
+  { href: "/forge", label: "Forge", enabled: features.forge },
+  { href: "/templates", label: "Templates", enabled: features.templates },
+  { href: "/docs", label: "Docs", enabled: true },
+].filter((link) => link.enabled);
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -57,9 +59,11 @@ export default function Header() {
 
           {/* Connect Wallet + Mobile Toggle */}
           <div className="flex items-center gap-3">
-            <button className="hidden sm:block cursor-hammer px-4 py-2 text-sm font-display uppercase tracking-wider border border-forge-orange text-forge-orange rounded hover:bg-forge-orange hover:text-white transition-all duration-200 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]">
-              Connect Wallet
-            </button>
+            {features.showConnect && (
+              <button className="hidden sm:block cursor-hammer px-4 py-2 text-sm font-display uppercase tracking-wider border border-forge-orange text-forge-orange rounded hover:bg-forge-orange hover:text-white transition-all duration-200 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]">
+                Connect Wallet
+              </button>
+            )}
 
             {/* Mobile menu button */}
             <button
@@ -99,11 +103,13 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <div className="px-4 pt-3">
-                <button className="w-full cursor-hammer px-4 py-2 text-sm font-display uppercase tracking-wider border border-forge-orange text-forge-orange rounded hover:bg-forge-orange hover:text-white transition-all">
-                  Connect Wallet
-                </button>
-              </div>
+              {features.showConnect && (
+                <div className="px-4 pt-3">
+                  <button className="w-full cursor-hammer px-4 py-2 text-sm font-display uppercase tracking-wider border border-forge-orange text-forge-orange rounded hover:bg-forge-orange hover:text-white transition-all">
+                    Connect Wallet
+                  </button>
+                </div>
+              )}
             </nav>
           </div>
         )}
