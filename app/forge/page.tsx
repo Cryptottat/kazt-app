@@ -252,7 +252,7 @@ export default function ForgePage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-bg cursor-crosshair">
+    <div className="h-screen flex flex-col bg-bg">
       <Header />
 
       {/* Action bar */}
