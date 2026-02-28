@@ -23,6 +23,7 @@ import type { RuleBlockType, RuleBlockNodeData } from "@/components/forge/RuleBl
 import BlockPalette from "@/components/forge/BlockPalette";
 import PropertiesPanel from "@/components/forge/PropertiesPanel";
 import SimulationPanel from "@/components/forge/SimulationPanel";
+import ValidationModal from "@/components/forge/ValidationModal";
 import { useForgeStore } from "@/lib/store";
 import { features } from "@/lib/features";
 
@@ -46,6 +47,10 @@ export default function ForgePage() {
   const [rightPanel, setRightPanel] = useState<"properties" | "simulation">(
     "properties"
   );
+  const [validationResult, setValidationResult] = useState<{
+    passed: boolean;
+    conflicts: string[];
+  } | null>(null);
 
   const {
     addBlock,
@@ -158,16 +163,18 @@ export default function ForgePage() {
       }
     });
 
-    if (conflicts.length === 0) {
-      alert("Validation PASSED. No conflicts detected.");
-    } else {
-      alert(`Validation found ${conflicts.length} issue(s):\n\n${conflicts.join("\n")}`);
-    }
+    setValidationResult({
+      passed: conflicts.length === 0,
+      conflicts,
+    });
   }, [nodes, edges]);
 
   const handleSimulate = useCallback(() => {
     if (nodes.length === 0) {
-      alert("Add at least one rule block before simulating.");
+      setValidationResult({
+        passed: false,
+        conflicts: ["Add at least one rule block before simulating."],
+      });
       return;
     }
 
@@ -242,7 +249,7 @@ export default function ForgePage() {
           </p>
           <a
             href="/"
-            className="mt-8 px-8 py-3 border border-forge-orange text-forge-orange font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange hover:text-white transition-all duration-200"
+            className="mt-8 px-8 py-3 pixel-border-orange text-forge-orange font-display uppercase tracking-wider text-sm hover:bg-forge-orange/10 transition-all duration-200"
           >
             Back to Home
           </a>
@@ -269,25 +276,25 @@ export default function ForgePage() {
 
         <button
           onClick={handleValidate}
-          className="px-3 py-1.5 text-xs font-display uppercase tracking-wider border border-wire-border text-text-secondary rounded hover:border-cast-green hover:text-cast-green transition-colors cursor-hammer"
+          className="px-3 py-1.5 text-xs font-display uppercase tracking-wider pixel-border text-text-secondary hover:border-cast-green hover:text-cast-green transition-colors cursor-hammer"
         >
           Validate
         </button>
         <button
           onClick={handleSimulate}
           disabled={isSimulating}
-          className="px-3 py-1.5 text-xs font-display uppercase tracking-wider border border-wire-border text-text-secondary rounded hover:border-molten-gold hover:text-molten-gold transition-colors cursor-hammer disabled:opacity-50"
+          className="px-3 py-1.5 text-xs font-display uppercase tracking-wider pixel-border text-text-secondary hover:border-molten-gold hover:text-molten-gold transition-colors cursor-hammer disabled:opacity-50"
         >
           {isSimulating ? "Simulating..." : "Simulate"}
         </button>
         <button
           onClick={handleExportJSON}
-          className="px-3 py-1.5 text-xs font-display uppercase tracking-wider border border-wire-border text-text-secondary rounded hover:border-forge-orange hover:text-forge-orange transition-colors cursor-hammer"
+          className="px-3 py-1.5 text-xs font-display uppercase tracking-wider pixel-border text-text-secondary hover:border-forge-orange hover:text-forge-orange transition-colors cursor-hammer"
         >
           Export JSON
         </button>
         <button
-          className={`px-3 py-1.5 text-xs font-display uppercase tracking-wider border border-wire-border rounded transition-colors ${
+          className={`px-3 py-1.5 text-xs font-display uppercase tracking-wider pixel-border transition-colors ${
             features.deploy
               ? "text-text-secondary hover:border-forge-orange hover:text-forge-orange cursor-hammer"
               : "text-text-muted cursor-not-allowed opacity-50"
@@ -407,6 +414,12 @@ export default function ForgePage() {
           Kazt Forge v0.1.0
         </span>
       </div>
+
+      {/* Validation Modal */}
+      <ValidationModal
+        result={validationResult}
+        onClose={() => setValidationResult(null)}
+      />
     </div>
   );
 }

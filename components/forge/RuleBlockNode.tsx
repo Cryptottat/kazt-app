@@ -63,12 +63,17 @@ function RuleBlockNodeComponent({ data, selected }: NodeProps<RuleBlockNode>) {
 
   return (
     <div
-      className={`relative min-w-[180px] max-w-[220px] rounded-lg border border-wire-border border-t-2 ${config.borderColor} transition-all duration-200 ${
+      className={`relative min-w-[180px] max-w-[220px] border-2 border-wire-border border-t-2 ${config.borderColor} transition-all duration-200 ${
         selected
           ? "shadow-[0_0_20px_rgba(249,115,22,0.2)] border-wire-border-hover"
           : "hover:border-wire-border-hover"
       }`}
-      style={{ background: `linear-gradient(to bottom, ${config.bgGlow}, #242830)` }}
+      style={{
+        background: `linear-gradient(to bottom, ${config.bgGlow}, #242830)`,
+        boxShadow: selected
+          ? "0 0 20px rgba(249,115,22,0.2), inset 2px 2px 0 rgba(255,255,255,0.03), inset -2px -2px 0 rgba(0,0,0,0.3)"
+          : "inset 2px 2px 0 rgba(255,255,255,0.03), inset -2px -2px 0 rgba(0,0,0,0.3)",
+      }}
     >
       {/* Input handle */}
       <Handle

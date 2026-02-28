@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { useJuice } from "@/hooks/useJuice";
 import { features } from "@/lib/features";
 
-// 프로젝트 CA가 존재하면 실제 DEX 링크 생성
 const PROJECT_CA = process.env.NEXT_PUBLIC_PROJECT_CA ?? "";
 const raydiumHref = PROJECT_CA
   ? `https://raydium.io/swap/?inputMint=sol&outputMint=${PROJECT_CA}`
@@ -16,190 +18,175 @@ interface Tier {
   borderColor: string;
   features: string[];
   highlight?: boolean;
+  icon: string;
 }
 
 const TIERS: Tier[] = [
-  {
-    name: "Free",
-    range: "0 $KAZT",
-    color: "text-text-muted",
-    borderColor: "border-wire-border",
-    features: [
-      "3 rule blocks max",
-      "Basic ordering rules",
-      "JSON export only",
-      "Community templates",
-    ],
-  },
-  {
-    name: "Basic",
-    range: "1,000 $KAZT",
-    color: "text-text-secondary",
-    borderColor: "border-iron-gray-light",
-    features: [
-      "10 rule blocks max",
-      "All rule types",
-      "JSON + Anchor export",
-      "Simulation: 50 TX",
-      "Conflict detection",
-    ],
-  },
-  {
-    name: "Pro",
-    range: "10,000 $KAZT",
-    color: "text-molten-gold",
-    borderColor: "border-molten-gold/50",
-    highlight: true,
-    features: [
-      "Unlimited blocks",
-      "All rule types",
-      "All export formats",
-      "Simulation: 500 TX",
-      "Advanced conflict analysis",
-      "Template marketplace",
-      "Priority support",
-    ],
-  },
-  {
-    name: "Elite",
-    range: "50,000 $KAZT",
-    color: "text-forge-orange",
-    borderColor: "border-forge-orange/50",
-    features: [
-      "Everything in Pro",
-      "Custom rule plugins",
-      "Simulation: 5,000 TX",
-      "Direct deploy to Solana",
-      "Rule versioning",
-      "Team workspaces",
-      "Dedicated support",
-    ],
-  },
-  {
-    name: "Whale",
-    range: "250,000 $KAZT",
-    color: "text-crack-red",
-    borderColor: "border-crack-red/30",
-    features: [
-      "Everything in Elite",
-      "White-label forge",
-      "Unlimited simulations",
-      "Custom integrations",
-      "Governance voting power",
-      "Revenue sharing",
-      "Direct team access",
-    ],
-  },
+  { name: "Free", range: "0 $KAZT", color: "text-text-muted", borderColor: "border-wire-border", icon: "/images/icons/tier-basic.png", features: ["3 rule blocks max", "Basic ordering rules", "JSON export only", "Community templates"] },
+  { name: "Basic", range: "100,000 $KAZT", color: "text-text-secondary", borderColor: "border-iron-gray-light", icon: "/images/icons/tier-basic.png", features: ["10 rule blocks max", "All rule types", "JSON + Anchor export", "Simulation: 50 TX", "Conflict detection"] },
+  { name: "Pro", range: "1,000,000 $KAZT", color: "text-molten-gold", borderColor: "border-molten-gold/50", highlight: true, icon: "/images/icons/tier-pro.png", features: ["Unlimited blocks", "All rule types", "All export formats", "Simulation: 500 TX", "Advanced conflict analysis", "Template marketplace", "Priority support"] },
+  { name: "Elite", range: "5,000,000 $KAZT", color: "text-forge-orange", borderColor: "border-forge-orange/50", icon: "/images/icons/tier-elite.png", features: ["Everything in Pro", "Custom rule plugins", "Simulation: 5,000 TX", "Direct deploy to Solana", "Rule versioning", "Team workspaces", "Dedicated support"] },
+  { name: "Whale", range: "25,000,000 $KAZT", color: "text-crack-red", borderColor: "border-crack-red/30", icon: "/images/icons/tier-whale.png", features: ["Everything in Elite", "White-label forge", "Unlimited simulations", "Custom integrations", "Governance voting power", "Revenue sharing", "Direct team access"] },
 ];
 
-export default function TokenUtility() {
-  const [activeTier, setActiveTier] = useState(2); // Pro highlighted by default
+/* Floating gold sparkles */
+function GoldSparkles() {
+  const sparkles = useMemo(
+    () =>
+      Array.from({ length: 16 }).map((_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        delay: `${Math.random() * 4}s`,
+        duration: `${2 + Math.random() * 3}s`,
+        size: Math.random() > 0.5 ? 2 : 1.5,
+      })),
+    []
+  );
 
-  // Phase 1: 토큰 정보 비공개 상태면 렌더링하지 않음
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {sparkles.map((s) => (
+        <div
+          key={s.id}
+          className="absolute"
+          style={{
+            left: s.left,
+            top: s.top,
+            width: s.size,
+            height: s.size,
+            backgroundColor: "var(--color-molten-gold)",
+            animation: `pixel-pulse ${s.duration} ${s.delay} ease-in-out infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function TokenUtility() {
+  const [activeTier, setActiveTier] = useState(2);
+  const { triggerHit } = useJuice();
+
   if (!features.showTokenInfo) return null;
 
   return (
-    <section id="token" className="relative py-24 sm:py-32 px-4 overflow-hidden">
-      {/* Background accent */}
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-forge-orange/3 rounded-full blur-[150px] pointer-events-none" />
+    <section id="token" className="relative py-20 sm:py-28 px-4 overflow-hidden">
+      {/* Golden gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-bg via-molten-gold/[0.05] to-bg" />
+      <div className="absolute inset-0 bg-gradient-to-r from-bg via-transparent to-bg" />
 
-      <div className="max-w-7xl mx-auto">
-        {/* Section heading */}
-        <div className="text-center mb-16 sm:mb-20">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-wider text-text-primary">
-            $KAZT Tiers
-          </h2>
-          <div className="mt-4 w-20 h-[2px] bg-forge-orange mx-auto" />
-          <p className="mt-6 text-text-secondary text-lg max-w-2xl mx-auto">
-            Hold $KAZT to unlock advanced forge capabilities. More tokens, more
-            power.
-          </p>
+      {/* Scanlines */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{
+        backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, var(--color-forge-orange) 3px, var(--color-forge-orange) 4px)",
+      }} />
+
+      {/* Logo watermark */}
+      <div className="absolute left-10 top-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none hidden lg:block">
+        <div className="relative w-[300px] h-[300px]">
+          <Image src="/images/logo.png" alt="" fill className="object-contain pixel-render" sizes="300px" />
+        </div>
+      </div>
+
+      <GoldSparkles />
+
+      {/* Glows */}
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-forge-orange/8 rounded-full blur-[200px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-[350px] h-[350px] bg-molten-gold/6 rounded-full blur-[150px] pointer-events-none" />
+
+      <div className="relative max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-start gap-6 mb-14">
+          <div className="hidden sm:block w-1 h-24 bg-gradient-to-b from-forge-orange via-molten-gold/50 to-transparent flex-shrink-0 mt-2" />
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="inline-block font-display text-[10px] tracking-[0.3em] text-forge-orange uppercase pixel-border-orange px-4 py-1.5 bg-forge-orange/10 mb-4">
+              $KAZT Tiers
+            </span>
+            <h2 className="font-display text-lg sm:text-xl md:text-2xl text-text-primary uppercase leading-relaxed">
+              More tokens, <span className="text-forge-orange" style={{ textShadow: "0 0 16px rgba(249,115,22,0.3)" }}>more power.</span>
+            </h2>
+            <p className="mt-2 text-sm text-text-secondary">Hold $KAZT to unlock advanced forge capabilities.</p>
+          </motion.div>
         </div>
 
         {/* Tier cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {TIERS.map((tier, index) => (
-            <button
+            <motion.button
               key={tier.name}
-              onClick={() => setActiveTier(index)}
-              className={`relative text-left bg-bg-card border rounded-lg p-6 transition-all duration-300 cursor-hammer ${
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: 0.08 * index }}
+              onClick={(e) => {
+                triggerHit(e);
+                setActiveTier(index);
+              }}
+              className={`relative text-left pixel-border bg-bg-card/60 p-5 transition-all duration-200 group ${
                 activeTier === index
-                  ? `${tier.borderColor} shadow-[0_0_25px_rgba(249,115,22,0.12)]`
-                  : "border-wire-border hover:border-wire-border-hover"
+                  ? `${tier.borderColor} shadow-[0_0_30px_rgba(249,115,22,0.15)] bg-bg-card/90`
+                  : "hover:border-wire-border-hover hover:bg-bg-card/80"
               }`}
             >
-              {/* Highlight badge */}
               {tier.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-molten-gold text-bg text-xs font-bold uppercase tracking-wider rounded">
+                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-molten-gold text-bg font-display text-[8px] uppercase tracking-wider">
                   Popular
                 </div>
               )}
 
-              {/* Tier name */}
-              <h3
-                className={`font-display text-lg font-bold uppercase tracking-wider ${tier.color}`}
-              >
-                {tier.name}
-              </h3>
+              {/* Active top bar */}
+              {activeTier === index && (
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-forge-orange" />
+              )}
 
-              {/* Token requirement */}
-              <p className="mt-1 text-text-muted text-xs font-mono">
-                {tier.range}
-              </p>
+              {/* Tier icon */}
+              <div className="relative w-8 h-8 mb-2" style={{ animation: activeTier === index ? `pixel-float 2s ease-in-out infinite` : undefined }}>
+                <Image src={tier.icon} alt="" fill className="object-contain pixel-render" sizes="32px" />
+              </div>
 
-              {/* Divider */}
-              <div
-                className={`mt-4 mb-4 h-[1px] ${
-                  activeTier === index ? "bg-forge-orange/30" : "bg-wire-border"
-                }`}
-              />
-
-              {/* Features */}
-              <ul className="space-y-2">
+              <h3 className={`font-display text-[10px] uppercase tracking-wider ${tier.color}`}>{tier.name}</h3>
+              <p className="mt-1 text-text-muted text-[10px] font-mono">{tier.range}</p>
+              <div className={`mt-3 mb-3 h-px ${activeTier === index ? "bg-forge-orange/30" : "bg-wire-border"}`} />
+              <ul className="space-y-1.5">
                 {tier.features.map((feature) => (
-                  <li
-                    key={feature}
-                    className="flex items-start gap-2 text-xs text-text-secondary"
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      className={`mt-0.5 flex-shrink-0 ${
-                        activeTier === index
-                          ? "text-forge-orange"
-                          : "text-text-muted"
-                      }`}
-                    >
-                      <path
-                        d="M3 7l3 3 5-5"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                  <li key={feature} className="flex items-start gap-1.5 text-[10px] text-text-secondary">
+                    <span className={`mt-0.5 w-1.5 h-1.5 flex-shrink-0 transition-colors ${activeTier === index ? "bg-forge-orange" : "bg-text-muted"}`} />
                     {feature}
                   </li>
                 ))}
               </ul>
-            </button>
+            </motion.button>
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-12 text-center">
+        {/* Buy CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-10 text-center"
+        >
           <a
             href={raydiumHref}
             target={PROJECT_CA ? "_blank" : undefined}
             rel={PROJECT_CA ? "noopener noreferrer" : undefined}
-            className="cursor-hammer inline-block px-8 py-3 border border-forge-orange text-forge-orange font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange hover:text-white transition-all duration-200 hover:shadow-[0_0_30px_rgba(249,115,22,0.3)]"
+            onMouseDown={(e) => triggerHit(e)}
+            className="juice-btn inline-block px-8 py-3 bg-forge-orange text-bg font-display uppercase text-xs tracking-wider hover:bg-forge-orange-light transition-colors"
           >
             Get $KAZT on Raydium
           </a>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Edge lines */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-forge-orange/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-forge-orange/20 to-transparent" />
     </section>
   );
 }

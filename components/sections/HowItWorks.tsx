@@ -1,225 +1,238 @@
 "use client";
 
+import { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { useJuice } from "@/hooks/useJuice";
+
 const STEPS = [
   {
     number: "01",
     title: "Design",
-    description:
-      "Drag and drop rule blocks onto the forge canvas. Configure ordering, batching, matching, priority, and filter rules with precision.",
-    icon: (
-      <svg
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
-        fill="none"
-        className="text-forge-orange"
-      >
-        {/* Blueprint / design icon */}
-        <rect
-          x="6"
-          y="6"
-          width="36"
-          height="36"
-          rx="2"
-          stroke="currentColor"
-          strokeWidth="2"
-        />
-        <rect
-          x="12"
-          y="12"
-          width="10"
-          height="10"
-          fill="currentColor"
-          opacity="0.3"
-        />
-        <rect
-          x="26"
-          y="12"
-          width="10"
-          height="10"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeDasharray="3 2"
-        />
-        <rect
-          x="12"
-          y="26"
-          width="10"
-          height="10"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeDasharray="3 2"
-        />
-        <rect
-          x="26"
-          y="26"
-          width="10"
-          height="10"
-          fill="currentColor"
-          opacity="0.3"
-        />
-        <line
-          x1="22"
-          y1="17"
-          x2="26"
-          y2="17"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-        <line
-          x1="17"
-          y1="22"
-          x2="17"
-          y2="26"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-      </svg>
-    ),
+    icon: "/images/icons/blueprint-design.png",
+    speaker: "Blacksmith Kazt",
+    dialogue: "First, lay out your rule blocks on the forge canvas. Drag and drop ordering, batching, matching, priority, and filter rules. No Rust required — just craft what you need.",
+    color: "molten-gold",
   },
   {
     number: "02",
     title: "Simulate",
-    description:
-      "Run transaction simulations against your rule configuration. Identify conflicts, test edge cases, and validate behavior before deployment.",
-    icon: (
-      <svg
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
-        fill="none"
-        className="text-molten-gold"
-      >
-        {/* Fire / simulation icon */}
-        <path
-          d="M24 4C24 4 14 16 14 28a10 10 0 0020 0C34 16 24 4 24 4z"
-          stroke="currentColor"
-          strokeWidth="2"
-          fill="currentColor"
-          fillOpacity="0.15"
-        />
-        <path
-          d="M24 16c0 0-5 6-5 14a5 5 0 0010 0c0-8-5-14-5-14z"
-          fill="currentColor"
-          opacity="0.4"
-        />
-        <circle cx="24" cy="30" r="2" fill="currentColor" />
-      </svg>
-    ),
+    icon: "/images/icons/fire-simulate.png",
+    speaker: "Blacksmith Kazt",
+    dialogue: "Now test your creation in the fire. Run transaction simulations against your rules. I'll help you spot conflicts and edge cases before you commit to chain.",
+    color: "forge-orange",
   },
   {
     number: "03",
     title: "Deploy",
-    description:
-      "Export your validated rules as Anchor IDL or JSON. Deploy directly to Solana with one click. Your rules are now set in chain, immutable and executable.",
-    icon: (
-      <svg
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
-        fill="none"
-        className="text-cast-green"
-      >
-        {/* Chain / deploy icon */}
-        <path
-          d="M20 28l8-8"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <rect
-          x="8"
-          y="24"
-          width="16"
-          height="16"
-          rx="3"
-          stroke="currentColor"
-          strokeWidth="2"
-          fill="currentColor"
-          fillOpacity="0.1"
-        />
-        <rect
-          x="24"
-          y="8"
-          width="16"
-          height="16"
-          rx="3"
-          stroke="currentColor"
-          strokeWidth="2"
-          fill="currentColor"
-          fillOpacity="0.1"
-        />
-        <path
-          d="M16 32l-2 2m4-4l-2 2"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <polyline
-          points="30,14 33,17 38,12"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
+    icon: "/images/icons/chain-deploy.png",
+    speaker: "Blacksmith Kazt",
+    dialogue: "Your rules are ready. Export as Anchor IDL or JSON, then deploy directly to Solana with one click. Your protection is now set in chain. Well forged, adventurer.",
+    color: "cast-green",
   },
 ];
 
+/* Typewriter effect hook */
+function useTypewriter(text: string, speed = 30) {
+  const [displayed, setDisplayed] = useState("");
+  const [isDone, setIsDone] = useState(false);
+  const indexRef = useRef(0);
+
+  useEffect(() => {
+    setDisplayed("");
+    setIsDone(false);
+    indexRef.current = 0;
+
+    const interval = setInterval(() => {
+      indexRef.current++;
+      if (indexRef.current <= text.length) {
+        setDisplayed(text.slice(0, indexRef.current));
+      } else {
+        setIsDone(true);
+        clearInterval(interval);
+      }
+    }, speed);
+
+    return () => clearInterval(interval);
+  }, [text, speed]);
+
+  // Skip to end
+  const skipToEnd = useCallback(() => {
+    setDisplayed(text);
+    setIsDone(true);
+  }, [text]);
+
+  return { displayed, isDone, skipToEnd };
+}
+
 export default function HowItWorks() {
+  const [activeStep, setActiveStep] = useState(0);
+  const step = STEPS[activeStep];
+  const { displayed, isDone, skipToEnd } = useTypewriter(step.dialogue, 25);
+  const { triggerHit } = useJuice();
+
+  const handleNext = useCallback(
+    (e: React.MouseEvent) => {
+      if (!isDone) {
+        skipToEnd();
+        return;
+      }
+      triggerHit(e);
+      setActiveStep((prev) => (prev + 1) % STEPS.length);
+    },
+    [isDone, skipToEnd, triggerHit]
+  );
+
+  const handlePrev = useCallback(
+    (e: React.MouseEvent) => {
+      triggerHit(e);
+      setActiveStep((prev) => (prev - 1 + STEPS.length) % STEPS.length);
+    },
+    [triggerHit]
+  );
+
   return (
-    <section className="relative py-24 sm:py-32 px-4 overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-forge-orange/5 rounded-full blur-[120px] pointer-events-none" />
+    <section className="relative py-20 sm:py-28 px-4 overflow-hidden">
+      {/* Warm workshop gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-bg via-molten-gold/[0.05] to-bg" />
 
-      <div className="max-w-6xl mx-auto">
-        {/* Section heading */}
-        <div className="text-center mb-16 sm:mb-20">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-wider text-text-primary">
+      {/* Dot grid — visible */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.1]" style={{
+        backgroundImage: "radial-gradient(circle, var(--color-molten-gold) 1px, transparent 1px)",
+        backgroundSize: "32px 32px",
+      }} />
+
+      {/* Glows */}
+      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-molten-gold/8 rounded-full blur-[180px] pointer-events-none" />
+
+      <div className="relative max-w-5xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-14"
+        >
+          <span className="inline-block font-display text-[10px] tracking-[0.3em] text-molten-gold uppercase pixel-border px-4 py-1.5 bg-molten-gold/10 mb-4">
             How It Works
+          </span>
+          <h2 className="font-display text-lg sm:text-xl md:text-2xl text-text-primary uppercase leading-relaxed">
+            Three steps to on-chain.
           </h2>
-          <div className="mt-4 w-20 h-[2px] bg-forge-orange mx-auto" />
-          <p className="mt-6 text-text-secondary text-lg max-w-2xl mx-auto">
-            Three steps from concept to on-chain execution. No Rust required.
-          </p>
-        </div>
+          <p className="mt-2 text-sm text-text-secondary">The blacksmith will guide you.</p>
+        </motion.div>
 
-        {/* Steps grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {STEPS.map((step, index) => (
-            <div
-              key={step.number}
-              className="group relative bg-bg-card border border-wire-border rounded-lg p-8 transition-all duration-300 hover:border-forge-orange/40 hover:shadow-[0_0_30px_rgba(249,115,22,0.08)]"
+        {/* Step indicators */}
+        <div className="flex justify-center gap-2 mb-8">
+          {STEPS.map((s, i) => (
+            <button
+              key={s.number}
+              onClick={(e) => { triggerHit(e); setActiveStep(i); }}
+              className={`juice-btn-secondary px-4 py-2 pixel-border font-display text-[9px] uppercase tracking-wider transition-all ${
+                i === activeStep
+                  ? `bg-${s.color}/20 border-${s.color} text-${s.color}`
+                  : "bg-bg-card/50 text-text-muted hover:text-text-secondary"
+              }`}
             >
-              {/* Step number */}
-              <div className="absolute -top-4 -left-2 font-display text-6xl font-bold text-forge-orange/10 select-none group-hover:text-forge-orange/20 transition-colors">
-                {step.number}
-              </div>
-
-              {/* Icon */}
-              <div className="relative mb-6 transition-transform duration-300 group-hover:scale-110">
-                {step.icon}
-              </div>
-
-              {/* Title */}
-              <h3 className="font-display text-xl sm:text-2xl font-bold uppercase tracking-wider text-text-primary mb-3">
-                {step.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-text-secondary text-sm leading-relaxed">
-                {step.description}
-              </p>
-
-              {/* Connector line between cards (desktop) */}
-              {index < STEPS.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-4 sm:-right-4 w-8 h-[2px] bg-wire-border" />
-              )}
-            </div>
+              {s.number} {s.title}
+            </button>
           ))}
         </div>
+
+        {/* Main dialogue area */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row items-end gap-6 md:gap-8"
+        >
+          {/* NPC Character — bobbing */}
+          <div className="flex-shrink-0 self-center md:self-end">
+            <div
+              className="relative w-24 h-24 sm:w-32 sm:h-32"
+              style={{ animation: "npc-bob 3s ease-in-out infinite" }}
+            >
+              <Image
+                src="/images/character.png"
+                alt="Blacksmith Kazt"
+                fill
+                className="object-contain pixel-render"
+                sizes="128px"
+              />
+            </div>
+          </div>
+
+          {/* Dialogue Box */}
+          <div className="flex-1 w-full">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeStep}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="dialogue-box p-5 sm:p-6"
+              >
+                {/* Speaker name tag */}
+                <div className={`inline-flex items-center gap-2 px-3 py-1 bg-${step.color}/20 mb-3`}>
+                  <div className="relative w-4 h-4 flex-shrink-0">
+                    <Image src={step.icon} alt="" fill className="object-contain pixel-render" sizes="16px" />
+                  </div>
+                  <span className={`font-display text-[9px] tracking-wider text-${step.color} uppercase`}>
+                    {step.speaker}
+                  </span>
+                </div>
+
+                {/* Step title */}
+                <h3 className="font-display text-sm sm:text-base text-text-primary uppercase tracking-wider mb-3">
+                  Step {step.number}: {step.title}
+                </h3>
+
+                {/* Typed dialogue text */}
+                <p className="text-sm text-text-secondary leading-relaxed min-h-[60px] font-mono">
+                  {displayed}
+                  {!isDone && (
+                    <span className="inline-block w-2 h-4 bg-forge-orange ml-0.5 align-middle"
+                      style={{ animation: "dialogue-cursor-blink 0.6s step-end infinite" }} />
+                  )}
+                </p>
+
+                {/* Navigation */}
+                <div className="flex items-center justify-between mt-5 pt-3 border-t border-wire-border">
+                  <button
+                    onClick={handlePrev}
+                    className="juice-btn-secondary px-3 py-1.5 pixel-border font-display text-[9px] text-text-muted uppercase tracking-wider hover:text-forge-orange hover:border-forge-orange transition-colors"
+                  >
+                    ◀ Prev
+                  </button>
+
+                  <div className="flex gap-1.5">
+                    {STEPS.map((_, i) => (
+                      <div key={i} className={`w-2 h-2 transition-colors ${
+                        i === activeStep ? "bg-forge-orange" :
+                        i < activeStep ? "bg-forge-orange/40" : "bg-wire-border"
+                      }`} />
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={handleNext}
+                    className="juice-btn-secondary px-3 py-1.5 pixel-border font-display text-[9px] text-forge-orange uppercase tracking-wider hover:bg-forge-orange/10 transition-colors"
+                  >
+                    {isDone ? (activeStep < STEPS.length - 1 ? "Next ▶" : "Restart ▶") : "Skip ▶▶"}
+                  </button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
       </div>
+
+      {/* Edge lines */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-molten-gold/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-molten-gold/20 to-transparent" />
     </section>
   );
 }

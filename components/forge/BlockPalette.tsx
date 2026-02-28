@@ -57,7 +57,7 @@ export default function BlockPalette({ onAddBlock }: BlockPaletteProps) {
         <button
           key={block.type}
           onClick={() => onAddBlock(block.type)}
-          className="group flex items-center gap-3 w-full text-left px-3 py-2.5 bg-bg-card border border-wire-border rounded-lg hover:border-wire-border-hover transition-all duration-200 cursor-hammer"
+          className="group flex items-center gap-3 w-full text-left px-3 py-2.5 bg-bg-card pixel-border hover:border-wire-border-hover transition-all duration-200 cursor-hammer"
           style={{
             borderLeftWidth: "3px",
             borderLeftColor: block.color,

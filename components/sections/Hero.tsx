@@ -1,125 +1,270 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { useMemo, useRef, useEffect, useState, useCallback, lazy, Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useJuice } from "@/hooks/useJuice";
 import { features } from "@/lib/features";
 
-const ForgeScene = dynamic(() => import("@/components/three/ForgeScene"), {
-  ssr: false,
-  loading: () => null,
-});
+const AnvilScene = lazy(() => import("@/components/three/AnvilScene"));
+
+/* ── Typewriter letter animation ─────────────────── */
+const charVariant = {
+  hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+};
+
+function SplitText({ text, className }: { text: string; className?: string }) {
+  return (
+    <span className={className} aria-label={text}>
+      {text.split("").map((ch, i) => (
+        <motion.span
+          key={i}
+          variants={charVariant}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="inline-block"
+          style={ch === " " ? { width: "0.35em" } : undefined}
+        >
+          {ch === " " ? "\u00A0" : ch}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
+/* ── Pixel Embers (CSS only fallback) ────────────── */
+function PixelEmbers() {
+  const embers = useMemo(
+    () =>
+      Array.from({ length: 15 }).map((_, i) => ({
+        id: i,
+        left: `${10 + Math.random() * 80}%`,
+        delay: `${Math.random() * 4}s`,
+        duration: `${1.5 + Math.random() * 2}s`,
+        size: Math.random() > 0.5 ? "w-1 h-1" : "w-0.5 h-0.5",
+      })),
+    []
+  );
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {embers.map((e) => (
+        <div
+          key={e.id}
+          className={`absolute ${e.size} bg-forge-orange`}
+          style={{
+            left: e.left,
+            bottom: "20%",
+            animation: `ember-rise ${e.duration} ${e.delay} ease-out infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ── Component ───────────────────────────────────── */
 
 export default function Hero() {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { triggerHit, triggerEmbers } = useJuice();
+  const containerRef = useRef<HTMLElement>(null);
+  const [show3D, setShow3D] = useState(false);
+
+  // Lazy load 3D on desktop
+  useEffect(() => {
+    if (!isMobile) {
+      const timer = setTimeout(() => setShow3D(true), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile]);
+
+  // Parallax mouse tracking
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+
+  // Transform mouse position to parallax offsets
+  const bgX = useTransform(springX, [-1, 1], [15, -15]);
+  const bgY = useTransform(springY, [-1, 1], [10, -10]);
+  const fgX = useTransform(springX, [-1, 1], [-8, 8]);
+  const fgY = useTransform(springY, [-1, 1], [-5, 5]);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth - 0.5) * 2);
+      mouseY.set((e.clientY / window.innerHeight - 0.5) * 2);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [isMobile, mouseX, mouseY]);
+
+  // Anvil hit handler
+  const handleAnvilHit = useCallback(() => {
+    triggerHit({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+  }, [triggerHit]);
+
+  // CTA button handler
+  const handleCTAClick = useCallback(
+    (e: React.MouseEvent) => {
+      triggerHit(e);
+    },
+    [triggerHit]
+  );
+
+  const seq = {
+    badge: 0.3,
+    line1: 0.6,
+    line2: 1.8,
+    subtitle: 2.8,
+    cta: 3.2,
+    scroll: 3.8,
+  };
 
   return (
-    <section className="relative w-full h-screen min-h-[600px] overflow-hidden">
-      {/* 3D Background or mobile fallback */}
-      {isMobile ? (
-        <div className="absolute inset-0 bg-gradient-to-b from-bg via-[#1a0f05] to-bg">
-          {/* Static radial glow for mobile */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-forge-orange/20 rounded-full blur-[100px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[30%] w-[200px] h-[200px] bg-molten-gold/15 rounded-full blur-[80px]" />
-          {/* Ember-like dots */}
-          <div className="absolute inset-0 overflow-hidden">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-1 h-1 bg-forge-orange rounded-full animate-pulse"
-                style={{
-                  left: `${10 + Math.random() * 80}%`,
-                  top: `${20 + Math.random() * 60}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  animationDuration: `${2 + Math.random() * 3}s`,
-                  opacity: 0.3 + Math.random() * 0.5,
-                }}
-              />
-            ))}
-          </div>
+    <section ref={containerRef} className="relative w-full h-screen min-h-[600px] overflow-hidden">
+      {/* Parallax pixel art background */}
+      <motion.div
+        className="absolute inset-[-30px]"
+        style={!isMobile ? { x: bgX, y: bgY } : undefined}
+      >
+        <Image
+          src="/images/hero-bg.png"
+          alt=""
+          fill
+          priority
+          className="object-cover pixel-render opacity-60"
+          sizes="110vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/50 to-bg/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-bg/70 via-transparent to-transparent" />
+      </motion.div>
+
+      {/* 3D Anvil (desktop only) — sits in bottom 50%, not overlapping text */}
+      {show3D && !isMobile && (
+        <div className="absolute left-0 right-0 top-[50%] bottom-0 z-[1]">
+          <AnvilScene onAnvilHit={handleAnvilHit} />
         </div>
-      ) : (
-        <ForgeScene />
       )}
 
-      {/* Dark gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-bg/60 via-transparent to-transparent pointer-events-none" />
+      {/* Mobile: CSS embers fallback */}
+      {isMobile && <PixelEmbers />}
 
-      {/* Content overlay */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
+      {/* Scanline overlay */}
+      <div className="absolute inset-0 scanlines pointer-events-none z-[2]" />
+
+      {/* Content */}
+      <motion.div
+        className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center"
+        style={!isMobile ? { x: fgX, y: fgY } : undefined}
+      >
+        {/* Version badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: seq.badge }}
+          className="mb-8 flex items-center gap-3 pixel-border px-4 py-2 bg-bg/60 backdrop-blur-sm"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full bg-cast-green opacity-75" />
+            <span className="relative inline-flex h-2 w-2 bg-cast-green" />
+          </span>
+          <span className="font-mono text-[10px] tracking-widest text-text-muted uppercase">
+            v0.1 // FORGE PROTOCOL
+          </span>
+        </motion.div>
+
         {/* Main heading */}
-        <h1 className="font-display uppercase tracking-wider">
-          <span
-            className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-text-primary"
-            style={{
-              textShadow:
-                "0 0 40px rgba(249,115,22,0.4), 0 0 80px rgba(249,115,22,0.2), 0 4px 20px rgba(0,0,0,0.8)",
-            }}
+        <h1 className="font-display uppercase">
+          <motion.span
+            className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-text-primary leading-relaxed"
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.03, delayChildren: seq.line1 }}
           >
-            Pour your rules.
-          </span>
-          <span
-            className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-forge-orange mt-2"
-            style={{
-              textShadow:
-                "0 0 30px rgba(249,115,22,0.5), 0 0 60px rgba(245,158,11,0.3), 0 4px 20px rgba(0,0,0,0.8)",
-            }}
+            <SplitText text="Pour your rules." />
+          </motion.span>
+
+          <motion.span
+            className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl text-forge-orange mt-2 leading-relaxed"
+            style={{ textShadow: "0 0 20px rgba(249,115,22,0.4), 0 0 40px rgba(249,115,22,0.2)" }}
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.03, delayChildren: seq.line2 }}
           >
-            Set them in chain.
-          </span>
+            <SplitText text="Set them in chain." />
+          </motion.span>
         </h1>
 
         {/* Subtitle */}
-        <p
-          className="mt-6 text-base sm:text-lg md:text-xl text-text-secondary max-w-xl"
-          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: seq.subtitle }}
+          className="mt-8 flex items-center gap-4"
         >
-          The first visual ACE rule builder on Solana.
-        </p>
+          <span className="hidden sm:block w-8 h-0.5 bg-forge-orange/30" />
+          <p className="font-mono text-[10px] sm:text-xs text-text-secondary tracking-[0.2em] uppercase">
+            The first visual ACE rule builder on Solana
+          </p>
+          <span className="hidden sm:block w-8 h-0.5 bg-forge-orange/30" />
+        </motion.div>
 
-        {/* CTA Buttons */}
-        <div className="mt-10 flex flex-col sm:flex-row gap-4">
+        {/* CTA Buttons with JUICE */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: seq.cta }}
+          className="mt-10 flex flex-col sm:flex-row gap-4"
+        >
           {features.forge ? (
             <Link
               href="/forge"
-              className="cursor-hammer px-8 py-3.5 bg-forge-orange text-white font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange-light transition-all duration-200 hover:shadow-[0_0_30px_rgba(249,115,22,0.4)] active:scale-95"
+              onClick={handleCTAClick}
+              className="juice-btn px-8 py-3 bg-forge-orange text-bg font-display uppercase text-xs tracking-wider hover:bg-forge-orange-light transition-colors active:scale-95"
             >
               Launch Forge
             </Link>
           ) : (
-            <span className="px-8 py-3.5 border border-wire-border text-text-muted font-display uppercase tracking-wider text-sm rounded cursor-default">
+            <span
+              onClick={handleCTAClick}
+              className="juice-btn-secondary px-8 py-3 pixel-border text-text-muted font-display uppercase text-xs tracking-wider bg-bg/40"
+            >
               Coming Soon
             </span>
           )}
           {features.showTokenInfo && (
             <a
               href="#token"
-              className="cursor-hammer px-8 py-3.5 border border-wire-border-hover text-text-primary font-display uppercase tracking-wider text-sm rounded hover:border-forge-orange hover:text-forge-orange transition-all duration-200 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)]"
+              onClick={handleCTAClick}
+              className="juice-btn-secondary px-8 py-3 pixel-border text-text-primary font-display uppercase text-xs tracking-wider hover:border-forge-orange hover:text-forge-orange transition-colors bg-bg/40 backdrop-blur-sm"
             >
               Buy $KAZT
             </a>
           )}
-        </div>
+        </motion.div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <span className="text-text-muted text-xs uppercase tracking-widest">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: seq.scroll }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+        >
+          <span className="font-mono text-[8px] text-text-muted tracking-[0.3em] uppercase">
             Scroll
           </span>
-          <svg
-            width="16"
-            height="24"
-            viewBox="0 0 16 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            className="text-text-muted"
-          >
-            <path d="M8 4v16M2 14l6 6 6-6" />
-          </svg>
-        </div>
-      </div>
+          <motion.div
+            animate={{ y: [0, 4, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-3 h-3 border-b-2 border-r-2 border-text-muted rotate-45"
+          />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

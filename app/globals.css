@@ -3,8 +3,8 @@
 @theme {
   /* Background */
   --color-bg: #0C0E12;
-  --color-bg-elevated: #1A1D23;
-  --color-bg-card: #242830;
+  --color-bg-elevated: #13161C;
+  --color-bg-card: #1A1D24;
 
   /* Primary */
   --color-forge-orange: #F97316;
@@ -35,12 +35,17 @@
   --color-wire-border: rgba(255, 255, 255, 0.08);
   --color-wire-border-hover: rgba(255, 255, 255, 0.15);
 
+  /* Pixel accent */
+  --color-pixel-blue: #4A90D9;
+  --color-pixel-purple: #7C5CBF;
+
   /* Fonts */
   --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-oswald), system-ui, sans-serif;
+  --font-display: var(--font-pixel), monospace;
   --font-mono: var(--font-jetbrains), monospace;
 }
 
+/* ── Base ────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
@@ -50,12 +55,252 @@ body {
   color: var(--color-text-primary);
 }
 
-/* Custom cursors -- 인터랙티브 요소만 */
-.cursor-hammer {
-  cursor: pointer;
+/* Pixel-perfect image rendering */
+.pixel-render {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-/* Scrollbar */
+/* ── Pixel Borders ───────────────────────────────── */
+.pixel-border {
+  border: 2px solid var(--color-wire-border);
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.03),
+    inset -2px -2px 0 rgba(0,0,0,0.3);
+}
+
+.pixel-border-orange {
+  border: 2px solid var(--color-forge-orange);
+  box-shadow:
+    0 0 0 1px rgba(249,115,22,0.15),
+    inset 2px 2px 0 rgba(249,115,22,0.1),
+    inset -2px -2px 0 rgba(0,0,0,0.3);
+}
+
+/* ── Scanline overlay ────────────────────────────── */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  z-index: 100;
+}
+
+/* ── Pixel Hammer Cursor ─────────────────────────── */
+*, *::before, *::after {
+  cursor: url('/images/cursor-hammer.png') 0 6, auto;
+}
+
+a, button, [role="button"], .cursor-hammer,
+input[type="submit"], input[type="button"] {
+  cursor: url('/images/cursor-hammer.png') 0 6, pointer;
+}
+
+/* Hit state: hammer swings down on mousedown */
+body.cursor-hit,
+body.cursor-hit *,
+body.cursor-hit *::before,
+body.cursor-hit *::after {
+  cursor: url('/images/cursor-hammer-hit.png') 0 6, auto !important;
+}
+
+/* ── Juice Button ────────────────────────────────── */
+.juice-btn {
+  position: relative;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+  box-shadow:
+    0 4px 0 var(--color-forge-orange-dark),
+    0 6px 12px rgba(0,0,0,0.4);
+}
+
+.juice-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 5px 0 var(--color-forge-orange-dark),
+    0 8px 16px rgba(0,0,0,0.5);
+}
+
+.juice-btn:active,
+.juice-btn.pressed {
+  transform: translateY(4px);
+  box-shadow:
+    0 0px 0 var(--color-forge-orange-dark),
+    0 1px 4px rgba(0,0,0,0.3);
+}
+
+/* Secondary juice button (outline style) */
+.juice-btn-secondary {
+  position: relative;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+  box-shadow:
+    0 4px 0 rgba(255,255,255,0.06),
+    0 6px 12px rgba(0,0,0,0.3);
+}
+
+.juice-btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 5px 0 rgba(249,115,22,0.2),
+    0 8px 16px rgba(0,0,0,0.4);
+}
+
+.juice-btn-secondary:active,
+.juice-btn-secondary.pressed {
+  transform: translateY(4px);
+  box-shadow:
+    0 0px 0 rgba(255,255,255,0.03),
+    0 1px 4px rgba(0,0,0,0.2);
+}
+
+/* ── Screen Shake ────────────────────────────────── */
+@keyframes screen-shake {
+  0%  { transform: translate(0, 0); }
+  10% { transform: translate(-3px, 2px); }
+  20% { transform: translate(4px, -2px); }
+  30% { transform: translate(-2px, 3px); }
+  40% { transform: translate(3px, -1px); }
+  50% { transform: translate(-1px, 2px); }
+  60% { transform: translate(2px, -2px); }
+  70% { transform: translate(-3px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  90% { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+body.shaking {
+  animation: screen-shake 0.3s ease-out;
+}
+
+/* ── Ember Burst (spawned via JS) ────────────────── */
+@keyframes ember-burst {
+  0% {
+    opacity: 1;
+    transform: translate(var(--tx, 0), var(--ty, 0)) scale(1);
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--tx, 0) * 3),
+      calc(var(--ty, 0) * 3 - 30px)
+    ) scale(0);
+  }
+}
+
+.ember-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 0;
+  animation: ember-burst 0.6s ease-out forwards;
+}
+
+/* ── Existing Keyframes ──────────────────────────── */
+@keyframes pixel-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pixel-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes ember-rise {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.3);
+  }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes spark-fade {
+  0% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(-28px) scale(0.3);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(249,115,22,0.3); }
+  50% { box-shadow: 0 0 20px rgba(249,115,22,0.6); }
+}
+
+.spark-active {
+  animation: spark-fade 0.8s ease-out forwards;
+}
+
+@keyframes pixel-rain {
+  0% { transform: translateY(-20px); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes timeline-travel {
+  0% { left: 0%; }
+  50% { left: 95%; }
+  100% { left: 0%; }
+}
+
+/* NPC bobbing */
+@keyframes npc-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Dialogue typing cursor */
+@keyframes dialogue-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── JRPG Dialogue Box ───────────────────────────── */
+.dialogue-box {
+  background: var(--color-bg-card);
+  border: 3px solid var(--color-forge-orange);
+  box-shadow:
+    inset 3px 3px 0 rgba(249,115,22,0.15),
+    inset -3px -3px 0 rgba(0,0,0,0.4),
+    0 0 20px rgba(249,115,22,0.1);
+  position: relative;
+}
+
+.dialogue-box::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(249,115,22,0.15);
+  pointer-events: none;
+}
+
+/* Dialogue arrow indicator */
+.dialogue-arrow {
+  animation: pixel-float 1s ease-in-out infinite;
+}
+
+/* ── Scrollbar ───────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -64,19 +309,19 @@ body {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-iron-gray);
-  border-radius: 3px;
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-iron-gray-light);
+  background: var(--color-forge-orange);
 }
 
-/* Selection */
+/* ── Selection ───────────────────────────────────── */
 ::selection {
   background: rgba(249, 115, 22, 0.3);
   color: var(--color-text-primary);
 }
 
-/* React Flow overrides for dark theme */
+/* ── React Flow overrides ────────────────────────── */
 .react-flow__node {
   cursor: grab !important;
 }
@@ -87,13 +332,13 @@ body {
   cursor: crosshair !important;
 }
 .react-flow__controls button {
-  background: #242830 !important;
+  background: #1A1D24 !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
   color: #9CA3AF !important;
   fill: #9CA3AF !important;
 }
 .react-flow__controls button:hover {
-  background: #1A1D23 !important;
+  background: #13161C !important;
   color: #F97316 !important;
   fill: #F97316 !important;
 }
@@ -104,7 +349,7 @@ body {
   stroke: #F97316 !important;
 }
 .react-flow__minimap {
-  background: #1A1D23 !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 4px;
+  background: #13161C !important;
+  border: 2px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0;
 }

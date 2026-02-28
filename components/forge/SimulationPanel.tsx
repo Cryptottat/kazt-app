@@ -45,8 +45,8 @@ export default function SimulationPanel() {
     return (
       <div className="flex flex-col items-center justify-center h-full p-6">
         <div className="relative w-8 h-8 mb-3">
-          <div className="absolute inset-0 border-2 border-wire-border rounded-full" />
-          <div className="absolute inset-0 border-2 border-forge-orange rounded-full border-t-transparent animate-spin" />
+          <div className="absolute inset-0 border-2 border-wire-border" />
+          <div className="absolute inset-0 border-2 border-forge-orange border-t-transparent animate-spin" />
         </div>
         <p className="text-text-muted text-xs">Running simulation...</p>
       </div>
@@ -86,7 +86,7 @@ export default function SimulationPanel() {
             return (
               <div
                 key={outcome}
-                className={`px-2 py-1 rounded text-[10px] font-mono ${config?.color} ${config?.bg}`}
+                className={`px-2 py-1 text-[10px] font-mono ${config?.color} ${config?.bg}`}
               >
                 {config?.label}: {count}
               </div>

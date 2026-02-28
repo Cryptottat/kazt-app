@@ -93,7 +93,7 @@ export default function PropertiesPanel() {
                 <select
                   value={String(value)}
                   onChange={(e) => handleParamChange(key, e.target.value)}
-                  className="w-full bg-bg border border-wire-border rounded px-2 py-1.5 text-xs text-text-primary font-mono focus:border-forge-orange focus:outline-none transition-colors"
+                  className="w-full bg-bg border border-wire-border px-2 py-1.5 text-xs text-text-primary font-mono focus:border-forge-orange focus:outline-none transition-colors"
                 >
                   {selectOpts.map((opt) => (
                     <option key={opt} value={opt}>
@@ -104,7 +104,7 @@ export default function PropertiesPanel() {
               ) : typeof value === "boolean" ? (
                 <button
                   onClick={() => handleParamChange(key, !value)}
-                  className={`px-3 py-1.5 text-xs rounded border transition-colors font-mono ${
+                  className={`px-3 py-1.5 text-xs border transition-colors font-mono ${
                     value
                       ? "border-cast-green text-cast-green bg-cast-green/10"
                       : "border-wire-border text-text-muted"
@@ -119,14 +119,14 @@ export default function PropertiesPanel() {
                   onChange={(e) =>
                     handleParamChange(key, parseFloat(e.target.value) || 0)
                   }
-                  className="w-full bg-bg border border-wire-border rounded px-2 py-1.5 text-xs text-text-primary font-mono focus:border-forge-orange focus:outline-none transition-colors"
+                  className="w-full bg-bg border border-wire-border px-2 py-1.5 text-xs text-text-primary font-mono focus:border-forge-orange focus:outline-none transition-colors"
                 />
               ) : (
                 <input
                   type="text"
                   value={String(value)}
                   onChange={(e) => handleParamChange(key, e.target.value)}
-                  className="w-full bg-bg border border-wire-border rounded px-2 py-1.5 text-xs text-text-primary font-mono focus:border-forge-orange focus:outline-none transition-colors"
+                  className="w-full bg-bg border border-wire-border px-2 py-1.5 text-xs text-text-primary font-mono focus:border-forge-orange focus:outline-none transition-colors"
                 />
               )}
             </div>

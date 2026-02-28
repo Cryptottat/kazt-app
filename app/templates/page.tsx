@@ -51,7 +51,7 @@ const FALLBACK_TEMPLATES: Template[] = [
     id: "tpl_dex_amm",
     name: "DEX AMM Protection Pack",
     description: "Standard MEV protection rules for AMM-based DEX protocols. Includes FIFO ordering, batch auctions, and sandwich attack filters.",
-    block_count: 4, downloads: 1200, price_kazt: 500, author: "0xAbc...123",
+    block_count: 4, downloads: 1200, price_kazt: 50000, author: "0xAbc...123",
     tags: ["defi", "amm", "mev-protection"], created_at: "2025-12-01T00:00:00Z",
     blocks: [
       { type: "ordering", name: "FIFO Queue" }, { type: "batching", name: "Batch Auction Window" },
@@ -62,7 +62,7 @@ const FALLBACK_TEMPLATES: Template[] = [
     id: "tpl_lending",
     name: "Lending Protocol Pack",
     description: "Ordering and batching rules optimized for lending protocols. Prevents oracle manipulation and ensures fair liquidation sequencing.",
-    block_count: 3, downloads: 890, price_kazt: 300, author: "0xDef...456",
+    block_count: 3, downloads: 890, price_kazt: 30000, author: "0xDef...456",
     tags: ["defi", "lending", "liquidation"], created_at: "2025-12-15T00:00:00Z",
     blocks: [
       { type: "ordering", name: "Time-Priority Ordering" }, { type: "batching", name: "Liquidation Batcher" },
@@ -73,7 +73,7 @@ const FALLBACK_TEMPLATES: Template[] = [
     id: "tpl_orderbook",
     name: "Orderbook Fairness Pack",
     description: "Price-time priority ordering with anti-frontrunning filters. Full CLOB matching engine integration with partial fill support.",
-    block_count: 5, downloads: 650, price_kazt: 800, author: "0x789...abc",
+    block_count: 5, downloads: 650, price_kazt: 80000, author: "0x789...abc",
     tags: ["defi", "orderbook", "clob", "fairness"], created_at: "2026-01-05T00:00:00Z",
     blocks: [
       { type: "ordering", name: "Price-Time Priority" }, { type: "matching", name: "CLOB Engine" },
@@ -85,7 +85,7 @@ const FALLBACK_TEMPLATES: Template[] = [
     id: "tpl_nft_mint",
     name: "NFT Mint Guard",
     description: "Fair minting protection for NFT launches. Randomized ordering prevents bot sniping and ensures equitable distribution.",
-    block_count: 2, downloads: 2100, price_kazt: 200, author: "0xMnt...789",
+    block_count: 2, downloads: 2100, price_kazt: 15000, author: "0xMnt...789",
     tags: ["nft", "minting", "anti-bot"], created_at: "2026-01-20T00:00:00Z",
     blocks: [
       { type: "ordering", name: "Randomized Sequencer" }, { type: "filter", name: "Bot Address Blacklist" },
@@ -95,7 +95,7 @@ const FALLBACK_TEMPLATES: Template[] = [
     id: "tpl_perp_mev",
     name: "Perpetuals MEV Shield",
     description: "MEV protection suite for perpetual futures protocols. Shields against oracle frontrunning and ensures fair position entry ordering.",
-    block_count: 4, downloads: 430, price_kazt: 600, author: "0xPrp...321",
+    block_count: 4, downloads: 430, price_kazt: 65000, author: "0xPrp...321",
     tags: ["defi", "perpetuals", "mev-protection", "derivatives"], created_at: "2026-02-01T00:00:00Z",
     blocks: [
       { type: "ordering", name: "Position Queue" }, { type: "filter", name: "Oracle Frontrun Filter" },
@@ -106,7 +106,7 @@ const FALLBACK_TEMPLATES: Template[] = [
     id: "tpl_staking_seq",
     name: "Staking Reward Sequencer",
     description: "Optimized reward distribution sequencing for staking protocols. Batches reward claims and orders by stake weight for gas efficiency.",
-    block_count: 3, downloads: 780, price_kazt: 400, author: "0xStk...654",
+    block_count: 3, downloads: 780, price_kazt: 40000, author: "0xStk...654",
     tags: ["staking", "rewards", "gas-optimization"], created_at: "2026-02-10T00:00:00Z",
     blocks: [
       { type: "ordering", name: "Stake-Weight Ordering" }, { type: "batching", name: "Reward Claim Batcher" },
