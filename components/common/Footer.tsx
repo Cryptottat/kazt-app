@@ -36,6 +36,7 @@ const NAV_LINKS = [
   { href: "/forge", label: "Forge" },
   { href: "/templates", label: "Templates" },
   { href: "/docs", label: "Docs" },
+  { href: "/app", label: "App" },
   { href: "#token", label: "$KAZT" },
 ];
 

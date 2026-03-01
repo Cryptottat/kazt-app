@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: "/forge", label: "Forge", enabled: features.forge },
   { href: "/templates", label: "Templates", enabled: features.templates },
   { href: "/docs", label: "Docs", enabled: true },
+  { href: "/app", label: "App", enabled: true },
 ].filter((link) => link.enabled);
 
 export default function Header() {
