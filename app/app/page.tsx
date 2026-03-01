@@ -4,10 +4,13 @@ import { motion } from "framer-motion";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
+const RELEASE_BASE = "https://github.com/usekazt/kazt/releases/download/v0.1.0";
+
 const PLATFORMS = [
   {
     name: "Windows",
     file: "Kazt-Forge-0.1.0.exe",
+    href: `${RELEASE_BASE}/Kazt-Forge-0.1.0.exe`,
     size: "82.4 MB",
     arch: "x64",
     minOs: "Windows 10+",
@@ -20,6 +23,7 @@ const PLATFORMS = [
   {
     name: "Linux",
     file: "kazt-forge-0.1.0-x86_64.AppImage",
+    href: `${RELEASE_BASE}/kazt-forge-0.1.0-x86_64.AppImage`,
     size: "76.1 MB",
     arch: "x86_64",
     minOs: "Ubuntu 20.04+ / Fedora 36+",
@@ -97,8 +101,8 @@ export default function AppPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 font-mono text-xs text-text-secondary tracking-wide max-w-xl mx-auto leading-relaxed"
           >
-            Experience the full power of the Deflationary Execution Layer locally.
-            Build ACE rules with hardware acceleration, run massive simulations, and deploy directly to Solana.
+            Describe your Solana program in natural language. AI generates Anchor code,
+            writes tests, runs them, and deploys. No Rust required.
           </motion.p>
         </div>
       </section>
@@ -299,18 +303,17 @@ export default function AppPage() {
                 </div>
 
                 {/* Download button */}
-                <div
-                  role="button"
-                  aria-disabled="true"
-                  tabIndex={-1}
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="relative w-full px-4 py-3 pixel-border font-display uppercase text-[10px] tracking-wider bg-bg/40 flex items-center justify-center gap-2 text-text-muted transition-all duration-200 hover:text-forge-orange hover:border-forge-orange/40 hover:bg-forge-orange/10 hover:shadow-[0_0_25px_rgba(249,115,22,0.15),0_4px_12px_rgba(249,115,22,0.1)] hover:-translate-y-0.5 active:translate-y-0 select-none"
-                  onClick={(e) => e.preventDefault()}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-200 group-hover:translate-y-0.5">
                     <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
                   </svg>
                   Download
-                </div>
+                </a>
               </motion.div>
             ))}
           </div>
