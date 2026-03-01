@@ -182,7 +182,7 @@ export default function AppPage() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
                 </svg>
-                Coming Soon
+                Download
               </button>
 
               {/* Hover glow */}
