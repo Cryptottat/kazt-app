@@ -13,7 +13,18 @@ interface AuthResult {
   api_key: string;
   wallet: string;
   tier: string;
+  balance: number;
+  daily_limit: number;
+  features: string[];
 }
+
+const TIER_TABLE = [
+  { tier: "Free", tokens: "0", limit: "3/day", color: "#9CA3AF" },
+  { tier: "Basic", tokens: "1,000+", limit: "50/day", color: "#F3F4F6" },
+  { tier: "Pro", tokens: "10,000+", limit: "500/day", color: "#F59E0B" },
+  { tier: "Elite", tokens: "100,000+", limit: "Unlimited", color: "#F97316" },
+  { tier: "Whale", tokens: "1,000,000+", limit: "Unlimited + Priority", color: "#EF4444" },
+];
 
 export default function AuthPage() {
   const { publicKey, signMessage, connected } = useWallet();
@@ -69,6 +80,8 @@ export default function AuthPage() {
   if (connected && step === "connect") {
     setStep("sign");
   }
+
+  const activeTier = result?.tier || null;
 
   return (
     <div className="min-h-screen bg-[#0C0E12] flex items-center justify-center p-4">
@@ -150,7 +163,7 @@ export default function AuthPage() {
             </div>
           </div>
 
-          {/* Step 3: API Key Display */}
+          {/* Step 3: Result */}
           {step === "done" && result && (
             <div>
               <div className="flex items-center gap-2 mb-3">
@@ -176,17 +189,31 @@ export default function AuthPage() {
                     {copied ? "Copied!" : "Copy"}
                   </button>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-[#9CA3AF] text-[10px] font-mono">
-                    Tier:
-                  </span>
-                  <span className="text-[#F97316] text-[10px] font-mono uppercase">
-                    {result.tier}
-                  </span>
+
+                {/* Balance & Tier Info */}
+                <div className="bg-[#1a1d24] border border-[#374151] p-3 space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-[#9CA3AF] text-[10px] font-mono">$KAZT Balance</span>
+                    <span className="text-[#F3F4F6] text-[10px] font-mono">
+                      {Number(result.balance).toLocaleString()} KAZT
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9CA3AF] text-[10px] font-mono">Tier</span>
+                    <span className="text-[#F97316] text-[10px] font-mono uppercase font-bold">
+                      {result.tier}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9CA3AF] text-[10px] font-mono">Daily Limit</span>
+                    <span className="text-[#F3F4F6] text-[10px] font-mono">
+                      {result.daily_limit === -1 ? "Unlimited" : `${result.daily_limit}/day`}
+                    </span>
+                  </div>
                 </div>
+
                 <p className="text-[#9CA3AF] text-[10px] font-mono leading-relaxed">
-                  Paste this key into Kazt Forge Desktop &rarr; Settings &rarr;
-                  API Key.
+                  Paste this key into Kazt Forge Desktop &rarr; enter on launch screen.
                 </p>
               </div>
             </div>
@@ -198,6 +225,52 @@ export default function AuthPage() {
               <p className="text-red-400 text-[10px] font-mono">{error}</p>
             </div>
           )}
+        </div>
+
+        {/* Tier Table */}
+        <div className="mt-6 border border-[#374151] bg-[#0C0E12]">
+          <div className="px-4 py-3 border-b border-[#374151]">
+            <span className="text-[#F97316] text-[10px] font-mono uppercase tracking-wider">
+              $KAZT Tier System
+            </span>
+          </div>
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-[#374151]">
+                <th className="px-4 py-2 text-left text-[9px] font-mono text-[#9CA3AF] uppercase">Tier</th>
+                <th className="px-4 py-2 text-right text-[9px] font-mono text-[#9CA3AF] uppercase">Hold</th>
+                <th className="px-4 py-2 text-right text-[9px] font-mono text-[#9CA3AF] uppercase">AI Generations</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TIER_TABLE.map((row) => (
+                <tr
+                  key={row.tier}
+                  className={`border-b border-[#374151]/50 ${
+                    activeTier && row.tier.toLowerCase() === activeTier
+                      ? "bg-[#F97316]/10"
+                      : ""
+                  }`}
+                >
+                  <td className="px-4 py-2">
+                    <span
+                      className="text-[10px] font-mono font-bold uppercase"
+                      style={{ color: row.color }}
+                    >
+                      {row.tier}
+                      {activeTier && row.tier.toLowerCase() === activeTier && " (You)"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 text-right text-[10px] font-mono text-[#F3F4F6]">
+                    {row.tokens}
+                  </td>
+                  <td className="px-4 py-2 text-right text-[10px] font-mono text-[#9CA3AF]">
+                    {row.limit}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* Footer */}
