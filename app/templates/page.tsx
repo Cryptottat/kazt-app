@@ -467,21 +467,26 @@ export default function TemplatesPage() {
   // 피처 플래그 비활성 시 커밍순 화면
   if (!features.templates) {
     return (
-      <div className="h-screen flex flex-col bg-bg">
+      <div className="min-h-screen flex flex-col bg-bg">
         <Header />
-        <div className="flex-1 flex flex-col items-center justify-center px-4 mt-16">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 mt-16 text-center">
           <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase tracking-wider text-text-primary">
             Template Marketplace
           </h1>
-          <p className="mt-4 text-text-secondary text-lg">
-            Coming Soon
+          <p className="mt-4 text-text-secondary text-lg max-w-md">
+            The library is empty. The first molds are still cooling.
           </p>
-          <a
-            href="/"
-            className="mt-8 px-8 py-3 border border-forge-orange text-forge-orange font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange hover:text-white transition-all duration-200"
-          >
-            Back to Home
-          </a>
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <a
+              href="/"
+              className="px-8 py-3 border border-forge-orange text-forge-orange font-display uppercase tracking-wider text-sm rounded hover:bg-forge-orange hover:text-white transition-all duration-200"
+            >
+              Back to Home
+            </a>
+            <p className="text-xs text-text-muted font-mono">
+              * 100% of marketplace fees will be burned.
+            </p>
+          </div>
         </div>
       </div>
     );

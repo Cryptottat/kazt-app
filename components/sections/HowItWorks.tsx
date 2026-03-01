@@ -24,10 +24,10 @@ const STEPS = [
   },
   {
     number: "03",
-    title: "Deploy",
+    title: "Deploy & Burn",
     icon: "/images/icons/chain-deploy.png",
     speaker: "Blacksmith Kazt",
-    dialogue: "Your rules are ready. Export as Anchor IDL or JSON, then deploy directly to Solana with one click. Your protection is now set in chain. Well forged, adventurer.",
+    dialogue: "Your rules are ready. Export as Anchor IDL or JSON, then deploy directly to Solana. Every deployment and template sale burns $KAZT. The flywheel turns.",
     color: "cast-green",
   },
 ];

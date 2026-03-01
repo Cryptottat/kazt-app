@@ -240,19 +240,24 @@ export default function ForgePage() {
     return (
       <div className="h-screen flex flex-col bg-bg">
         <Header />
-        <div className="flex-1 flex flex-col items-center justify-center px-4 mt-16">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 mt-16 text-center">
           <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase tracking-wider text-text-primary">
             Rule Forge
           </h1>
-          <p className="mt-4 text-text-secondary text-lg">
-            Coming Soon
+          <p className="mt-4 text-text-secondary text-lg max-w-md">
+            The anvil is still cold. The forge is being prepared for the first pour.
           </p>
-          <a
-            href="/"
-            className="mt-8 px-8 py-3 pixel-border-orange text-forge-orange font-display uppercase tracking-wider text-sm hover:bg-forge-orange/10 transition-all duration-200"
-          >
-            Back to Home
-          </a>
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <a
+              href="/"
+              className="px-8 py-3 pixel-border-orange text-forge-orange font-display uppercase tracking-wider text-sm hover:bg-forge-orange/10 transition-all duration-200"
+            >
+              Back to Home
+            </a>
+            <p className="text-xs text-text-muted font-mono">
+              * 100% of deployment fees will be burned.
+            </p>
+          </div>
         </div>
       </div>
     );

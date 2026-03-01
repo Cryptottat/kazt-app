@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Press_Start_2P, JetBrains_Mono } from "next/font/google";
 import GlobalCursorHit from "@/components/common/GlobalCursorHit";
+import MouseSparks from "@/components/ui/MouseSparks";
 import "./globals.css";
 
 const inter = Inter({
@@ -69,6 +70,7 @@ export default function RootLayout({
     >
       <body className="bg-bg text-text-primary font-sans antialiased">
         <GlobalCursorHit />
+        <MouseSparks />
         {children}
       </body>
     </html>

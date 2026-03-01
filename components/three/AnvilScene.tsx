@@ -241,15 +241,6 @@ function SceneContent({ onAnvilHit }: { onAnvilHit?: () => void }) {
 
       <Embers />
 
-      {/* Ground plane — wide enough so edges never show */}
-      <mesh position={[0, -1.5, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[80, 80]} />
-        <meshStandardMaterial color="#0C0E12" roughness={1} metalness={0} />
-      </mesh>
-
-      {/* Fog plane — gradient fade at distance to hide far ground edge */}
-      <fog attach="fog" args={["#0C0E12", 5, 18]} />
-
       <EffectComposer>
         <Bloom intensity={1.2} luminanceThreshold={0.25} luminanceSmoothing={0.9} mipmapBlur />
         <Vignette darkness={0.5} offset={0.3} />

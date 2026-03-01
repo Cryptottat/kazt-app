@@ -6,9 +6,9 @@ import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 
 const STATS = [
   { value: "$5-10M", label: "Daily MEV losses on Solana DEXs", color: "text-crack-red", icon: "/images/icons/skull-mev.png" },
-  { value: "< 10%", label: "Protocols using ACE protection", color: "text-warning", icon: "/images/icons/shield-broken.png" },
-  { value: "3-7 days", label: "To write ACE rules manually", color: "text-text-secondary", icon: "/images/icons/hourglass.png" },
-  { value: "~40%", label: "BAM setup failure rate", color: "text-forge-orange", icon: "/images/icons/explosion.png" },
+  { value: "Billions", label: "Volume to be routed through Kazt", color: "text-warning", icon: "/images/icons/shield-broken.png" },
+  { value: "100%", label: "Protocol fees burned", color: "text-forge-orange", icon: "/images/icons/explosion.png" },
+  { value: "0 Lines", label: "Of Rust code required", color: "text-text-secondary", icon: "/images/icons/hourglass.png" },
 ];
 
 /* Broken pixel debris that scatter from mouse */
@@ -158,8 +158,8 @@ export default function Problem() {
             </h2>
 
             <p className="text-sm text-text-secondary leading-relaxed mb-6">
-              MEV bots are draining $5-10M daily from Solana DEXs. ACE rules can stop them —
-              but writing them takes a week of Rust coding, and 40% of Jito BAM setups fail.
+              MEV bots extract millions daily. Protocols bleed, and users pay the hidden tax. ACE rules can stop them —
+              but writing them takes a week of Rust coding. We fix this at the ecosystem level.
             </p>
 
             {/* JRPG-style dialogue box warning */}

@@ -7,11 +7,11 @@ import { useJuice } from "@/hooks/useJuice";
 
 const FEATURES = [
   { icon: "/images/icons/anvil-hammer.png", title: "Visual Rule Builder", desc: "Drag-and-drop ACE rule blocks. Ordering, batching, matching, priority, filters — no Rust required.", size: "large", accent: "forge-orange" },
-  { icon: "/images/icons/fire-simulate.png", title: "Rule Simulator", desc: "Test rules against sample transactions. Catch conflicts before they hit mainnet.", size: "small", accent: "crack-red" },
+  { icon: "/images/icons/fire-simulate.png", title: "Deflationary Engine", desc: "100% of all protocol revenue is routed to an autonomous smart contract that buys and burns $KAZT.", size: "large", accent: "crack-red" },
   { icon: "/images/icons/chain-deploy.png", title: "One-Click Deploy", desc: "Export as Anchor IDL or JSON. Deploy to Solana directly from the forge.", size: "small", accent: "cast-green" },
   { icon: "/images/icons/shield-bam.png", title: "Jito BAM Integration", desc: "Toggle TEE, encrypted mempool, and sequencing settings visually.", size: "small", accent: "pixel-blue" },
   { icon: "/images/icons/chest-marketplace.png", title: "Template Marketplace", desc: "Browse, buy, and sell verified rule sets. Community-tested protection patterns.", size: "small", accent: "pixel-purple" },
-  { icon: "/images/icons/magnify-conflict.png", title: "Conflict Detection", desc: "Dependency graph analysis catches circular references and conflicting rules before deploy.", size: "large", accent: "molten-gold" },
+  { icon: "/images/icons/magnify-conflict.png", title: "Conflict Detection", desc: "Dependency graph analysis catches circular references and conflicting rules before deploy.", size: "small", accent: "molten-gold" },
 ];
 
 /* Animated pixel rain */

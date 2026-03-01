@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 
 const POOL_SIZE = 14;
 const THROTTLE_MS = 50;
@@ -10,6 +10,11 @@ export default function MouseSparks() {
   const containerRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef(0);
   const lastTimeRef = useRef(0);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    setIsDesktop(!window.matchMedia("(max-width: 768px)").matches);
+  }, []);
 
   const handleMove = useCallback((e: MouseEvent) => {
     const now = performance.now();
@@ -37,9 +42,12 @@ export default function MouseSparks() {
   }, []);
 
   useEffect(() => {
+    if (!isDesktop) return;
     window.addEventListener("mousemove", handleMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMove);
-  }, [handleMove]);
+  }, [handleMove, isDesktop]);
+
+  if (!isDesktop) return null;
 
   return (
     <div

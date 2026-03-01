@@ -26,7 +26,7 @@ const TIERS: Tier[] = [
   { name: "Basic", range: "100,000 $KAZT", color: "text-text-secondary", borderColor: "border-iron-gray-light", icon: "/images/icons/tier-basic.png", features: ["10 rule blocks max", "All rule types", "JSON + Anchor export", "Simulation: 50 TX", "Conflict detection"] },
   { name: "Pro", range: "1,000,000 $KAZT", color: "text-molten-gold", borderColor: "border-molten-gold/50", highlight: true, icon: "/images/icons/tier-pro.png", features: ["Unlimited blocks", "All rule types", "All export formats", "Simulation: 500 TX", "Advanced conflict analysis", "Template marketplace", "Priority support"] },
   { name: "Elite", range: "5,000,000 $KAZT", color: "text-forge-orange", borderColor: "border-forge-orange/50", icon: "/images/icons/tier-elite.png", features: ["Everything in Pro", "Custom rule plugins", "Simulation: 5,000 TX", "Direct deploy to Solana", "Rule versioning", "Team workspaces", "Dedicated support"] },
-  { name: "Whale", range: "25,000,000 $KAZT", color: "text-crack-red", borderColor: "border-crack-red/30", icon: "/images/icons/tier-whale.png", features: ["Everything in Elite", "White-label forge", "Unlimited simulations", "Custom integrations", "Governance voting power", "Revenue sharing", "Direct team access"] },
+  { name: "Whale", range: "25,000,000 $KAZT", color: "text-crack-red", borderColor: "border-crack-red/30", icon: "/images/icons/tier-whale.png", features: ["Everything in Elite", "White-label forge", "Unlimited simulations", "Custom integrations", "Governance voting power", "50% Fee Discount", "Direct team access"] },
 ];
 
 /* Floating gold sparkles */
@@ -96,21 +96,47 @@ export default function TokenUtility() {
 
       <div className="relative max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-start gap-6 mb-14">
-          <div className="hidden sm:block w-1 h-24 bg-gradient-to-b from-forge-orange via-molten-gold/50 to-transparent flex-shrink-0 mt-2" />
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-14">
+          <div className="flex items-start gap-6">
+            <div className="hidden sm:block w-1 h-24 bg-gradient-to-b from-forge-orange via-molten-gold/50 to-transparent flex-shrink-0 mt-2" />
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5 }}
+            >
+              <span className="inline-block font-display text-[10px] tracking-[0.3em] text-forge-orange uppercase pixel-border-orange px-4 py-1.5 bg-forge-orange/10 mb-4">
+                $KAZT Tiers
+              </span>
+              <h2 className="font-display text-lg sm:text-xl md:text-2xl text-text-primary uppercase leading-relaxed">
+                More tokens, <span className="text-forge-orange" style={{ textShadow: "0 0 16px rgba(249,115,22,0.3)" }}>more power.</span>
+              </h2>
+              <p className="mt-2 text-sm text-text-secondary">Hold $KAZT to unlock advanced forge capabilities.</p>
+            </motion.div>
+          </div>
+
+          {/* Deflationary Highlight Box */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="w-full md:w-auto pixel-border-orange bg-forge-orange/5 p-5 relative overflow-hidden"
           >
-            <span className="inline-block font-display text-[10px] tracking-[0.3em] text-forge-orange uppercase pixel-border-orange px-4 py-1.5 bg-forge-orange/10 mb-4">
-              $KAZT Tiers
-            </span>
-            <h2 className="font-display text-lg sm:text-xl md:text-2xl text-text-primary uppercase leading-relaxed">
-              More tokens, <span className="text-forge-orange" style={{ textShadow: "0 0 16px rgba(249,115,22,0.3)" }}>more power.</span>
-            </h2>
-            <p className="mt-2 text-sm text-text-secondary">Hold $KAZT to unlock advanced forge capabilities.</p>
+            <div className="absolute inset-0 bg-gradient-to-br from-forge-orange/10 to-transparent pointer-events-none" />
+            <div className="relative z-10 flex items-center gap-4">
+              <div className="w-12 h-12 flex-shrink-0 bg-forge-orange/20 rounded-full flex items-center justify-center border border-forge-orange/30">
+                <span className="text-xl">🔥</span>
+              </div>
+              <div>
+                <h3 className="font-display text-sm text-forge-orange uppercase tracking-wider mb-1">
+                  100% Buy & Burn
+                </h3>
+                <p className="text-xs text-text-secondary max-w-[200px] leading-relaxed">
+                  All protocol revenue from template sales and deployments is used to buy and burn $KAZT.
+                </p>
+              </div>
+            </div>
           </motion.div>
         </div>
 

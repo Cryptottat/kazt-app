@@ -83,7 +83,7 @@ export default function CTA() {
                 className="mt-3"
               >
                 <p className="text-sm text-text-secondary font-mono">
-                  &quot;Zero ACE rule builders exist. Be the first to forge.&quot;
+                  &quot;The toll booth for Solana's liquidity. Build once, burn forever.&quot;
                 </p>
                 <p className="text-[9px] text-text-muted mt-1 font-display tracking-wider uppercase">— Blacksmith Kazt</p>
               </motion.div>

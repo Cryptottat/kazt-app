@@ -71,6 +71,7 @@ export default function Hero() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { triggerHit, triggerEmbers } = useJuice();
   const containerRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const [show3D, setShow3D] = useState(false);
 
   // Lazy load 3D on desktop
@@ -98,6 +99,18 @@ export default function Hero() {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set((e.clientX / window.innerWidth - 0.5) * 2);
       mouseY.set((e.clientY / window.innerHeight - 0.5) * 2);
+
+      // Mouse proximity → text glow intensity
+      if (headingRef.current) {
+        const dx = e.clientX / window.innerWidth - 0.5;
+        const dy = e.clientY / window.innerHeight - 0.5;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const a = Math.max(0.2, Math.min(0.85, 1 - dist * 2.5));
+        const glowEl = headingRef.current.querySelector<HTMLElement>("[data-glow]");
+        if (glowEl) {
+          glowEl.style.textShadow = `0 0 ${10 + a * 30}px rgba(249,115,22,${a}), 0 0 ${20 + a * 50}px rgba(249,115,22,${a * 0.4})`;
+        }
+      }
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
@@ -157,6 +170,14 @@ export default function Hero() {
       {/* Scanline overlay */}
       <div className="absolute inset-0 scanlines pointer-events-none z-[2]" />
 
+      {/* Corner bracket decorations (desktop only) */}
+      {!isMobile && (
+        <>
+          <div className="absolute top-6 left-6 w-8 h-8 border-t-2 border-l-2 border-forge-orange/10 z-[3] pointer-events-none" />
+          <div className="absolute bottom-6 right-6 w-8 h-8 border-b-2 border-r-2 border-forge-orange/10 z-[3] pointer-events-none" />
+        </>
+      )}
+
       {/* Content */}
       <motion.div
         className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center"
@@ -179,7 +200,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Main heading */}
-        <h1 className="font-display uppercase">
+        <h1 ref={headingRef} className="font-display uppercase">
           <motion.span
             className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-text-primary leading-relaxed"
             initial="hidden"
@@ -190,8 +211,9 @@ export default function Hero() {
           </motion.span>
 
           <motion.span
+            data-glow
             className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl text-forge-orange mt-2 leading-relaxed"
-            style={{ textShadow: "0 0 20px rgba(249,115,22,0.4), 0 0 40px rgba(249,115,22,0.2)" }}
+            style={{ textShadow: "0 0 20px rgba(249,115,22,0.3), 0 0 40px rgba(249,115,22,0.15)" }}
             initial="hidden"
             animate="visible"
             transition={{ staggerChildren: 0.03, delayChildren: seq.line2 }}
@@ -209,7 +231,7 @@ export default function Hero() {
         >
           <span className="hidden sm:block w-8 h-0.5 bg-forge-orange/30" />
           <p className="font-mono text-[10px] sm:text-xs text-text-secondary tracking-[0.2em] uppercase">
-            The first visual ACE rule builder on Solana
+            The Deflationary Execution Layer for Solana DeFi
           </p>
           <span className="hidden sm:block w-8 h-0.5 bg-forge-orange/30" />
         </motion.div>
@@ -225,7 +247,7 @@ export default function Hero() {
             <Link
               href="/forge"
               onClick={handleCTAClick}
-              className="juice-btn px-8 py-3 bg-forge-orange text-bg font-display uppercase text-xs tracking-wider hover:bg-forge-orange-light transition-colors active:scale-95"
+              className="juice-btn px-8 py-3 bg-forge-orange text-bg font-display uppercase text-xs tracking-[0.2em] hover:bg-forge-orange-light transition-colors active:scale-95"
             >
               Launch Forge
             </Link>
@@ -241,9 +263,9 @@ export default function Hero() {
             <a
               href="#token"
               onClick={handleCTAClick}
-              className="juice-btn-secondary px-8 py-3 pixel-border text-text-primary font-display uppercase text-xs tracking-wider hover:border-forge-orange hover:text-forge-orange transition-colors bg-bg/40 backdrop-blur-sm"
+              className="juice-btn-secondary px-8 py-3 pixel-border text-text-primary font-display uppercase text-xs tracking-[0.2em] hover:border-forge-orange hover:text-forge-orange transition-colors bg-bg/40 backdrop-blur-sm"
             >
-              Buy $KAZT
+              Get $KAZT
             </a>
           )}
         </motion.div>
