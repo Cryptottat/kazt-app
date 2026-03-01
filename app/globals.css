@@ -103,7 +103,7 @@ input[type="submit"], input[type="button"] {
   cursor: url('/images/cursor-hammer.png') 0 6, pointer;
 }
 
-button:disabled, [disabled] {
+button:disabled, [disabled], [aria-disabled="true"] {
   cursor: not-allowed !important;
 }
 
