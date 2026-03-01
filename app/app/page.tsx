@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Header from "@/components/common/Header";
@@ -35,53 +34,44 @@ const PLATFORMS = [
 
 const FEATURES = [
   {
-    title: "Local Rule Forge",
-    desc: "Build ACE rules offline with the same visual canvas as the web app.",
-    icon: "anvil",
+    title: "Describe, Don't Code",
+    desc: "Tell Kazt what your program should do in plain language. The AI handles architecture, accounts, instructions — everything.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+      </svg>
+    ),
   },
   {
-    title: "CLI Integration",
-    desc: "Import/export rulesets from the command line. Script your workflow.",
-    icon: "terminal",
+    title: "Full Build Pipeline",
+    desc: "Generates Anchor programs, writes tests, compiles, and resolves errors automatically. From idea to deployable in minutes.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M4 17l6-5-6-5M12 19h8" />
+      </svg>
+    ),
   },
   {
-    title: "Batch Simulation",
-    desc: "Run 10,000+ TX simulations locally without rate limits.",
-    icon: "chart",
+    title: "Local & Devnet Testing",
+    desc: "Runs your program on local validator and devnet automatically. Catches bugs before they ever touch mainnet.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M9 12l2 2 4-4M3 3v18h18M7 16l4-4 4 4 5-6" />
+      </svg>
+    ),
   },
   {
-    title: "Direct Deploy",
-    desc: "Deploy rules to Solana directly from the desktop client.",
-    icon: "deploy",
+    title: "One-Click Deploy",
+    desc: "When tests pass, deploy to Solana mainnet with a single click. Program upgrades and authority management included.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16" />
+      </svg>
+    ),
   },
 ];
 
-const ICON_MAP: Record<string, React.ReactNode> = {
-  anvil: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M4 14h16M7 14V8a3 3 0 013-3h4a3 3 0 013 3v6M5 14v4a1 1 0 001 1h12a1 1 0 001-1v-4" />
-    </svg>
-  ),
-  terminal: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M4 17l6-5-6-5M12 19h8" />
-    </svg>
-  ),
-  chart: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M3 3v18h18M7 16l4-4 4 4 5-6" />
-    </svg>
-  ),
-  deploy: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16" />
-    </svg>
-  ),
-};
-
 export default function AppPage() {
-  const [hoveredPlatform, setHoveredPlatform] = useState<string | null>(null);
-
   return (
     <main className="min-h-screen bg-bg">
       <Header />
@@ -108,12 +98,12 @@ export default function AppPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="font-display text-xl sm:text-2xl md:text-3xl text-text-primary uppercase leading-relaxed"
           >
-            Forge rules.<br />
+            Say what you need.<br />
             <span
               className="text-forge-orange"
               style={{ textShadow: "0 0 20px rgba(249,115,22,0.4)" }}
             >
-              On your machine.
+              Kazt builds it.
             </span>
           </motion.h1>
 
@@ -121,10 +111,11 @@ export default function AppPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-4 font-mono text-xs text-text-secondary tracking-wide max-w-lg mx-auto"
+            className="mt-4 font-mono text-xs text-text-secondary tracking-wide max-w-xl mx-auto leading-relaxed"
           >
-            The Kazt desktop client brings the full rule forge experience offline.
-            Build, simulate, and deploy ACE rules without browser limitations.
+            Describe your Solana program in plain language. Kazt generates the code,
+            compiles it, runs tests on local validator and devnet, and deploys — all automatically.
+            Anyone can build and ship on Solana.
           </motion.p>
         </div>
       </section>
@@ -138,12 +129,13 @@ export default function AppPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-              onMouseEnter={() => setHoveredPlatform(p.name)}
-              onMouseLeave={() => setHoveredPlatform(null)}
-              className="relative pixel-border bg-bg-card/60 p-6 group"
+              className="relative pixel-border bg-bg-card/60 p-6 group hover:border-forge-orange/30 transition-all duration-200"
             >
               {/* Top accent */}
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-forge-orange/40 via-forge-orange to-forge-orange/40 opacity-50" />
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-forge-orange/40 via-forge-orange to-forge-orange/40 opacity-50 group-hover:opacity-100 transition-opacity" />
+
+              {/* Hover glow */}
+              <div className="absolute inset-0 pointer-events-none bg-forge-orange/[0.02] opacity-0 group-hover:opacity-100 transition-opacity" />
 
               {/* Platform icon + name */}
               <div className="flex items-center gap-3 mb-4">
@@ -161,34 +153,29 @@ export default function AppPage() {
               {/* File info */}
               <div className="mb-5 space-y-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-text-muted" />
+                  <span className="w-1.5 h-1.5 bg-text-muted group-hover:bg-forge-orange/50 transition-colors" />
                   <span className="font-mono text-[10px] text-text-secondary">{p.file}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-text-muted" />
+                  <span className="w-1.5 h-1.5 bg-text-muted group-hover:bg-forge-orange/50 transition-colors" />
                   <span className="font-mono text-[10px] text-text-secondary">{p.size}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-text-muted" />
+                  <span className="w-1.5 h-1.5 bg-text-muted group-hover:bg-forge-orange/50 transition-colors" />
                   <span className="font-mono text-[10px] text-text-secondary">{p.minOs}</span>
                 </div>
               </div>
 
-              {/* Download button — disabled */}
+              {/* Download button — disabled but hover-reactive */}
               <button
                 disabled
-                className="w-full px-4 py-2.5 pixel-border font-display uppercase text-[10px] tracking-wider text-text-muted bg-bg/40 cursor-not-allowed opacity-60 flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 pixel-border font-display uppercase text-[10px] tracking-wider bg-bg/40 flex items-center justify-center gap-2 transition-all duration-200 text-text-muted group-hover:text-forge-orange/70 group-hover:border-forge-orange/20 group-hover:bg-forge-orange/[0.04]"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-200 group-hover:translate-y-0.5">
                   <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
                 </svg>
                 Download
               </button>
-
-              {/* Hover glow */}
-              {hoveredPlatform === p.name && (
-                <div className="absolute inset-0 pointer-events-none bg-forge-orange/[0.02] transition-opacity" />
-              )}
             </motion.div>
           ))}
         </div>
@@ -209,6 +196,55 @@ export default function AppPage() {
       {/* Divider */}
       <div className="max-w-3xl mx-auto h-px bg-gradient-to-r from-transparent via-wire-border to-transparent" />
 
+      {/* How it works */}
+      <section className="relative py-16 px-4">
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-10"
+          >
+            <h2 className="font-display text-sm sm:text-base uppercase tracking-wider text-text-primary">
+              How it works
+            </h2>
+            <p className="mt-2 font-mono text-[11px] text-text-secondary">
+              From idea to mainnet in four steps.
+            </p>
+          </motion.div>
+
+          {/* Steps */}
+          <div className="space-y-3">
+            {[
+              { step: "01", text: "\"I need a token vesting program with cliff period and linear unlock\"" },
+              { step: "02", text: "Kazt generates Anchor program, accounts, instructions, and test suite" },
+              { step: "03", text: "Automated build → local validator test → devnet deployment → all tests pass" },
+              { step: "04", text: "One click to deploy on mainnet. Done." },
+            ].map((s, i) => (
+              <motion.div
+                key={s.step}
+                initial={{ opacity: 0, x: -12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.08 * i }}
+                className="flex items-start gap-4 pixel-border bg-bg-card/30 p-4 hover:border-forge-orange/15 transition-colors group"
+              >
+                <span className="font-display text-[10px] text-forge-orange/60 group-hover:text-forge-orange transition-colors mt-0.5 flex-shrink-0">
+                  {s.step}
+                </span>
+                <p className="font-mono text-[11px] text-text-secondary leading-relaxed">
+                  {s.text}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="max-w-3xl mx-auto h-px bg-gradient-to-r from-transparent via-wire-border to-transparent" />
+
       {/* Features grid */}
       <section className="relative py-16 px-4">
         <div className="max-w-3xl mx-auto">
@@ -220,11 +256,8 @@ export default function AppPage() {
             className="mb-10"
           >
             <h2 className="font-display text-sm sm:text-base uppercase tracking-wider text-text-primary">
-              Why desktop?
+              Features
             </h2>
-            <p className="mt-2 font-mono text-[11px] text-text-secondary">
-              Everything the web forge does, plus more.
-            </p>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -239,7 +272,7 @@ export default function AppPage() {
               >
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5 text-text-muted group-hover:text-forge-orange transition-colors">
-                    {ICON_MAP[f.icon]}
+                    {f.icon}
                   </div>
                   <div>
                     <h3 className="font-display text-[10px] uppercase tracking-wider text-text-primary">
@@ -276,22 +309,30 @@ export default function AppPage() {
                 <div className="w-2.5 h-2.5 rounded-full bg-molten-gold/60" />
                 <div className="w-2.5 h-2.5 rounded-full bg-cast-green/60" />
               </div>
-              <span className="font-mono text-[9px] text-text-muted ml-2">Kazt Desktop — Rule Forge</span>
+              <span className="font-mono text-[9px] text-text-muted ml-2">Kazt Desktop</span>
             </div>
 
-            {/* Fake app content */}
-            <div className="bg-bg/80 pixel-border p-6 sm:p-8 min-h-[200px] sm:min-h-[280px] flex items-center justify-center">
-              <div className="text-center">
-                <div className="relative w-16 h-16 mx-auto mb-4 opacity-40">
-                  <Image src="/images/logo.png" alt="" fill className="object-contain pixel-render" sizes="64px" />
-                </div>
-                <p className="font-display text-[10px] text-text-muted uppercase tracking-wider">
-                  Preview coming soon
-                </p>
-                <p className="font-mono text-[9px] text-text-muted/60 mt-2">
-                  Desktop app is currently in development
-                </p>
-              </div>
+            {/* Fake app content — terminal style */}
+            <div className="bg-bg/80 pixel-border p-5 sm:p-6 min-h-[200px] sm:min-h-[260px] font-mono text-[10px] leading-relaxed">
+              <p className="text-text-muted">$ kazt</p>
+              <p className="text-cast-green mt-2">Kazt v0.1.0 ready.</p>
+              <p className="text-text-secondary mt-3">
+                <span className="text-forge-orange">{">"}</span> Build me a token vesting program with 6-month cliff
+                and 24-month linear unlock. Include admin controls for
+                pausing and revoking.
+              </p>
+              <p className="text-molten-gold mt-3">Generating program...</p>
+              <p className="text-text-muted mt-1">├─ programs/vesting/src/lib.rs</p>
+              <p className="text-text-muted">├─ programs/vesting/src/state.rs</p>
+              <p className="text-text-muted">├─ programs/vesting/src/instructions/</p>
+              <p className="text-text-muted">├─ tests/vesting.ts</p>
+              <p className="text-text-muted">└─ Anchor.toml</p>
+              <p className="text-cast-green mt-3">Build succeeded. Running 12 tests on local validator...</p>
+              <p className="text-cast-green">All tests passed. Deploying to devnet...</p>
+              <p className="text-cast-green mt-1">
+                Program deployed: <span className="text-forge-orange">Vest...7kXp</span>
+              </p>
+              <p className="text-text-secondary mt-3 animate-pulse">█</p>
             </div>
           </motion.div>
         </div>
