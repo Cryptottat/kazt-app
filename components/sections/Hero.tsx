@@ -10,6 +10,8 @@ import { features } from "@/lib/features";
 
 const AnvilScene = lazy(() => import("@/components/three/AnvilScene"));
 
+const PROJECT_CA = process.env.NEXT_PUBLIC_PROJECT_CA ?? "";
+
 /* ── Typewriter letter animation ─────────────────── */
 const charVariant = {
   hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
@@ -269,6 +271,19 @@ export default function Hero() {
             </a>
           )}
         </motion.div>
+
+        {/* CA Address */}
+        {PROJECT_CA && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: seq.cta + 0.3 }}
+            className="mt-6 flex items-center gap-2 pixel-border px-4 py-2 bg-bg/60 backdrop-blur-sm"
+          >
+            <span className="font-mono text-[10px] text-text-muted tracking-wider">CA:</span>
+            <span className="font-mono text-[10px] text-forge-orange tracking-wider select-all">{PROJECT_CA}</span>
+          </motion.div>
+        )}
 
         {/* Scroll indicator */}
         <motion.div
