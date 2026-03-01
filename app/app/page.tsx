@@ -344,7 +344,7 @@ export default function AppPage() {
                   role="button"
                   aria-disabled="true"
                   tabIndex={-1}
-                  className="relative w-full px-4 py-2.5 pixel-border font-display uppercase text-[10px] tracking-wider bg-bg/40 flex items-center justify-center gap-2 text-text-muted transition-all duration-200 hover:text-forge-orange hover:border-forge-orange/30 hover:bg-forge-orange/[0.06] hover:shadow-[0_0_15px_rgba(249,115,22,0.08)] select-none"
+                  className="relative w-full px-4 py-3 pixel-border font-display uppercase text-[10px] tracking-wider bg-bg/40 flex items-center justify-center gap-2 text-text-muted transition-all duration-200 hover:text-forge-orange hover:border-forge-orange/40 hover:bg-forge-orange/10 hover:shadow-[0_0_25px_rgba(249,115,22,0.15),0_4px_12px_rgba(249,115,22,0.1)] hover:-translate-y-0.5 active:translate-y-0 select-none"
                   onClick={(e) => e.preventDefault()}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-200 group-hover:translate-y-0.5">
