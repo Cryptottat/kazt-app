@@ -20,10 +20,10 @@ interface AuthResult {
 
 const TIER_TABLE = [
   { tier: "Free", tokens: "0", limit: "3/day", color: "#9CA3AF" },
-  { tier: "Basic", tokens: "1,000+", limit: "50/day", color: "#F3F4F6" },
-  { tier: "Pro", tokens: "10,000+", limit: "500/day", color: "#F59E0B" },
-  { tier: "Elite", tokens: "100,000+", limit: "Unlimited", color: "#F97316" },
-  { tier: "Whale", tokens: "1,000,000+", limit: "Unlimited + Priority", color: "#EF4444" },
+  { tier: "Basic", tokens: "100,000+", limit: "50/day", color: "#F3F4F6" },
+  { tier: "Pro", tokens: "1,000,000+", limit: "500/day", color: "#F59E0B" },
+  { tier: "Elite", tokens: "5,000,000+", limit: "Unlimited", color: "#F97316" },
+  { tier: "Whale", tokens: "25,000,000+", limit: "Unlimited + Priority", color: "#EF4444" },
 ];
 
 export default function AuthPage() {
