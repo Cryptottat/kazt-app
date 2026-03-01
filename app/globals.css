@@ -103,6 +103,10 @@ input[type="submit"], input[type="button"] {
   cursor: url('/images/cursor-hammer.png') 0 6, pointer;
 }
 
+button:disabled, [disabled] {
+  cursor: not-allowed !important;
+}
+
 /* Hit state: hammer swings down on mousedown */
 body.cursor-hit,
 body.cursor-hit *,
