@@ -7,8 +7,8 @@ import { useJuice } from "@/hooks/useJuice";
 import { features } from "@/lib/features";
 
 const PROJECT_CA = process.env.NEXT_PUBLIC_PROJECT_CA ?? "";
-const raydiumHref = PROJECT_CA
-  ? `https://raydium.io/swap/?inputMint=sol&outputMint=${PROJECT_CA}`
+const buyHref = PROJECT_CA
+  ? `https://pump.fun/coin/${PROJECT_CA}`
   : "#";
 
 interface Tier {
@@ -199,13 +199,13 @@ export default function TokenUtility() {
           className="mt-10 text-center"
         >
           <a
-            href={raydiumHref}
+            href={buyHref}
             target={PROJECT_CA ? "_blank" : undefined}
             rel={PROJECT_CA ? "noopener noreferrer" : undefined}
             onMouseDown={(e) => triggerHit(e)}
             className="juice-btn inline-block px-8 py-3 bg-forge-orange text-bg font-display uppercase text-xs tracking-wider hover:bg-forge-orange-light transition-colors"
           >
-            Get $KAZT on Raydium
+            Get $KAZT
           </a>
         </motion.div>
       </div>
