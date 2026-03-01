@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
@@ -8,8 +7,8 @@ import Footer from "@/components/common/Footer";
 const PLATFORMS = [
   {
     name: "Windows",
-    file: "Kazt-Setup-0.1.0.exe",
-    size: "74.2 MB",
+    file: "Kazt-Forge-0.1.0.exe",
+    size: "82.4 MB",
     arch: "x64",
     minOs: "Windows 10+",
     icon: (
@@ -20,8 +19,8 @@ const PLATFORMS = [
   },
   {
     name: "Linux",
-    file: "kazt-0.1.0-x86_64.AppImage",
-    size: "68.8 MB",
+    file: "kazt-forge-0.1.0-x86_64.AppImage",
+    size: "76.1 MB",
     arch: "x86_64",
     minOs: "Ubuntu 20.04+ / Fedora 36+",
     icon: (
@@ -34,39 +33,29 @@ const PLATFORMS = [
 
 const FEATURES = [
   {
-    title: "Describe, Don't Code",
-    desc: "Tell Kazt what your program should do in plain language. AI handles architecture, accounts, instructions, and tests.",
+    title: "Local Simulation Engine",
+    desc: "Run high-performance ACE rule simulations locally. Test against millions of historical transactions without RPC limits.",
   },
   {
-    title: "Full Build Pipeline",
-    desc: "Generates Anchor programs, compiles, resolves errors, and iterates with you until everything passes.",
+    title: "Direct Deployment",
+    desc: "Deploy your execution layer directly to Solana mainnet from your desktop. Secure, fast, and fully integrated.",
   },
   {
-    title: "Auto Test & Deploy",
-    desc: "Local validator → devnet → mainnet. Automated testing at every stage. One click to go live.",
+    title: "Advanced Rule Forge",
+    desc: "The full power of the visual node builder, optimized for desktop performance with hardware acceleration.",
   },
   {
-    title: "Web & API Bridge",
-    desc: "Connect to kazt.fun via MCP and API. Sync rules, push templates, manage deployments from desktop.",
-    beta: true,
+    title: "Deflationary Sync",
+    desc: "Every deployment through the desktop app routes 100% of fees to the $KAZT Buy & Burn smart contract.",
   },
   {
     title: "Template Marketplace",
-    desc: "Publish programs you built as templates. Sell on the marketplace. Buy proven programs from other builders.",
+    desc: "Browse, buy, and sell institutional-grade MEV protection templates directly from the desktop client.",
   },
   {
-    title: "Interactive Build",
-    desc: "Kazt asks clarifying questions, suggests patterns, and lets you refine step-by-step. Not a black box.",
+    title: "Jito BAM Integration",
+    desc: "Native integration with Jito Block Engine. Configure TEE and encrypted mempool settings visually.",
   },
-];
-
-/* ── Block cards for the fake app UI ── */
-const PREVIEW_BLOCKS = [
-  { label: "Token Mint", type: "account", color: "#F97316" },
-  { label: "Vesting Vault", type: "account", color: "#F59E0B" },
-  { label: "Initialize", type: "instruction", color: "#10B981" },
-  { label: "Claim", type: "instruction", color: "#10B981" },
-  { label: "Revoke", type: "instruction", color: "#EF4444" },
 ];
 
 export default function AppPage() {
@@ -86,7 +75,7 @@ export default function AppPage() {
             transition={{ duration: 0.5 }}
           >
             <span className="inline-block font-display text-[10px] tracking-[0.3em] text-forge-orange uppercase pixel-border-orange px-4 py-1.5 bg-forge-orange/10 mb-6">
-              Desktop App
+              Kazt Desktop Client
             </span>
           </motion.div>
 
@@ -96,9 +85,9 @@ export default function AppPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="font-display text-xl sm:text-2xl md:text-3xl text-text-primary uppercase leading-relaxed"
           >
-            Say what you need.<br />
+            The Forge,<br />
             <span className="text-forge-orange" style={{ textShadow: "0 0 20px rgba(249,115,22,0.4)" }}>
-              Kazt builds it.
+              Unleashed.
             </span>
           </motion.h1>
 
@@ -108,136 +97,111 @@ export default function AppPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 font-mono text-xs text-text-secondary tracking-wide max-w-xl mx-auto leading-relaxed"
           >
-            Describe your Solana program in plain language. Kazt generates the code,
-            builds it, runs tests, and deploys — all automatically.
-            Anyone can create and ship a Solana program.
+            Experience the full power of the Deflationary Execution Layer locally.
+            Build ACE rules with hardware acceleration, run massive simulations, and deploy directly to Solana.
           </motion.p>
         </div>
       </section>
 
-      {/* ── App Preview: Card UI + Terminal combined ── */}
+      {/* ── App Preview: Desktop UI Mockup ── */}
       <section className="relative px-4 pb-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="pixel-border bg-bg-card/40 p-2 sm:p-3 overflow-hidden"
+            className="pixel-border bg-bg-card/80 backdrop-blur-md overflow-hidden shadow-[0_0_50px_rgba(249,115,22,0.1)]"
           >
             {/* Window titlebar */}
-            <div className="flex items-center gap-2 mb-2 px-2 py-1">
+            <div className="flex items-center gap-2 px-4 py-2 border-b border-wire-border bg-bg-elevated">
               <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-crack-red/60" />
-                <div className="w-2.5 h-2.5 rounded-full bg-molten-gold/60" />
-                <div className="w-2.5 h-2.5 rounded-full bg-cast-green/60" />
+                <div className="w-3 h-3 rounded-full bg-crack-red/80" />
+                <div className="w-3 h-3 rounded-full bg-molten-gold/80" />
+                <div className="w-3 h-3 rounded-full bg-cast-green/80" />
               </div>
-              <span className="font-mono text-[9px] text-text-muted ml-2">Kazt Desktop — Token Vesting Program</span>
-              <div className="ml-auto flex items-center gap-2">
+              <span className="font-mono text-[10px] text-text-muted ml-2 tracking-widest">KAZT FORGE DESKTOP v0.1.0</span>
+              <div className="ml-auto flex items-center gap-3">
+                <span className="font-mono text-[9px] text-forge-orange">100% BURN ACTIVE</span>
                 <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-cast-green rounded-full" />
-                  <span className="font-mono text-[8px] text-cast-green">connected</span>
+                  <span className="w-2 h-2 bg-cast-green rounded-full animate-pulse" />
+                  <span className="font-mono text-[9px] text-cast-green">MAINNET</span>
                 </span>
               </div>
             </div>
 
-            {/* Split layout: cards left + sidebar right */}
-            <div className="flex flex-col lg:flex-row gap-2">
-              {/* Main area: generated blocks + terminal */}
-              <div className="flex-1 space-y-2">
-                {/* Generated program blocks */}
-                <div className="bg-bg/60 pixel-border p-3 sm:p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-mono text-[9px] text-text-muted uppercase tracking-wider">Generated Program Structure</span>
-                    <span className="font-mono text-[8px] text-cast-green px-2 py-0.5 bg-cast-green/10 border border-cast-green/20">build passed</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {PREVIEW_BLOCKS.map((b) => (
-                      <div
-                        key={b.label}
-                        className="pixel-border px-3 py-2 bg-bg-card/80 flex items-center gap-2 min-w-[100px]"
-                        style={{ borderColor: `${b.color}30` }}
-                      >
-                        <div className="w-2 h-2 flex-shrink-0" style={{ backgroundColor: b.color }} />
-                        <div>
-                          <p className="font-mono text-[10px] text-text-primary">{b.label}</p>
-                          <p className="font-mono text-[8px] text-text-muted">{b.type}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Connection lines hint */}
-                  <div className="mt-3 flex items-center gap-2">
-                    <div className="h-px flex-1 bg-gradient-to-r from-forge-orange/30 via-molten-gold/20 to-cast-green/30" />
-                    <span className="font-mono text-[8px] text-text-muted">5 accounts &middot; 3 instructions &middot; 12 tests</span>
-                    <div className="h-px flex-1 bg-gradient-to-r from-cast-green/30 via-molten-gold/20 to-forge-orange/30" />
-                  </div>
+            {/* Split layout: Sidebar + Canvas + Properties */}
+            <div className="flex h-[500px]">
+              {/* Sidebar */}
+              <div className="w-48 border-r border-wire-border bg-bg-elevated flex flex-col p-4">
+                <div className="font-display text-[10px] text-text-muted uppercase tracking-wider mb-4">Rule Blocks</div>
+                <div className="space-y-2">
+                  {['Ordering', 'Batching', 'Matching', 'Priority', 'Filter'].map((type) => (
+                    <div key={type} className="px-3 py-2 text-xs font-mono text-text-secondary border border-wire-border bg-bg/50 hover:border-forge-orange/50 transition-colors cursor-pointer">
+                      + {type}
+                    </div>
+                  ))}
                 </div>
-
-                {/* Terminal */}
-                <div className="bg-bg/80 pixel-border p-3 sm:p-4 font-mono text-[10px] leading-relaxed">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="font-mono text-[8px] text-text-muted uppercase tracking-wider">Terminal</span>
+                <div className="mt-auto">
+                  <div className="font-display text-[10px] text-text-muted uppercase tracking-wider mb-2">Local Node</div>
+                  <div className="px-3 py-2 text-[9px] font-mono text-cast-green border border-cast-green/30 bg-cast-green/10">
+                    Syncing... Block 254,192,881
                   </div>
-                  <p className="text-text-secondary">
-                    <span className="text-forge-orange">{">"}</span> Build me a token vesting program with 6-month cliff
-                    and 24-month linear unlock. Include admin controls.
-                  </p>
-                  <p className="text-molten-gold mt-2">Analyzing requirements...</p>
-                  <p className="text-text-muted mt-1">Creating accounts: TokenMint, VestingVault, VestingSchedule</p>
-                  <p className="text-text-muted">Creating instructions: initialize, claim, revoke</p>
-                  <p className="text-text-muted">Generating test suite: 12 test cases</p>
-                  <p className="text-cast-green mt-2">Build succeeded. All 12 tests passed on local validator.</p>
-                  <p className="text-cast-green">Devnet deploy: <span className="text-forge-orange">Vest...7kXp</span> <span className="text-text-muted">(confirmed)</span></p>
-                  <p className="text-text-secondary mt-2">
-                    <span className="text-forge-orange">{">"}</span> Add a whitelist check to the claim instruction
-                  </p>
-                  <p className="text-molten-gold">Updating program... rebuilding... 13 tests passed.</p>
-                  <p className="text-text-secondary mt-2 animate-pulse">█</p>
                 </div>
               </div>
 
-              {/* Sidebar */}
-              <div className="lg:w-[200px] space-y-2 flex-shrink-0">
-                {/* Test results */}
-                <div className="bg-bg/60 pixel-border p-3">
-                  <span className="font-mono text-[8px] text-text-muted uppercase tracking-wider block mb-2">Test Results</span>
-                  <div className="space-y-1">
-                    {["initialize", "claim_after_cliff", "claim_partial", "claim_full", "revoke_admin", "whitelist_check"].map((t, i) => (
-                      <div key={t} className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-cast-green flex-shrink-0" />
-                        <span className="font-mono text-[9px] text-text-secondary truncate">{t}</span>
-                      </div>
-                    ))}
-                    <p className="font-mono text-[8px] text-text-muted mt-1">+ 7 more passed</p>
+              {/* Canvas Area */}
+              <div className="flex-1 relative bg-bg overflow-hidden">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: "radial-gradient(circle, var(--color-wire-border) 1px, transparent 1px)",
+                  backgroundSize: "20px 20px",
+                }} />
+                
+                {/* Nodes & Lines Mockup */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                  <path d="M 180 150 C 280 150, 280 250, 380 250" stroke="var(--color-forge-orange)" strokeWidth="2" fill="none" />
+                  <path d="M 180 150 C 280 150, 280 80, 380 80" stroke="var(--color-crack-red)" strokeWidth="2" strokeDasharray="4 4" fill="none" />
+                </svg>
+
+                <div className="absolute top-[110px] left-[30px] w-48 bg-bg-card border border-crack-red/50 shadow-lg">
+                  <div className="px-3 py-1.5 bg-crack-red/20 border-b border-crack-red/30 flex justify-between items-center">
+                    <span className="font-display text-[10px] text-crack-red uppercase">Filter</span>
+                  </div>
+                  <div className="p-3">
+                    <div className="text-xs text-text-primary font-mono mb-1">Sandwich Guard</div>
+                    <div className="text-[9px] text-text-muted">Blocks known MEV bots</div>
                   </div>
                 </div>
 
-                {/* Deploy status */}
-                <div className="bg-bg/60 pixel-border p-3">
-                  <span className="font-mono text-[8px] text-text-muted uppercase tracking-wider block mb-2">Deploy</span>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[9px] text-text-secondary">Local</span>
-                      <span className="font-mono text-[8px] text-cast-green">passed</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[9px] text-text-secondary">Devnet</span>
-                      <span className="font-mono text-[8px] text-cast-green">live</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[9px] text-text-secondary">Mainnet</span>
-                      <span className="font-mono text-[8px] text-text-muted">ready</span>
-                    </div>
+                <div className="absolute top-[210px] left-[380px] w-48 bg-bg-card border border-forge-orange/50 shadow-lg">
+                  <div className="px-3 py-1.5 bg-forge-orange/20 border-b border-forge-orange/30 flex justify-between items-center">
+                    <span className="font-display text-[10px] text-forge-orange uppercase">Ordering</span>
+                  </div>
+                  <div className="p-3">
+                    <div className="text-xs text-text-primary font-mono mb-1">Price-Time Priority</div>
+                    <div className="text-[9px] text-text-muted">Standard CLOB sorting</div>
                   </div>
                 </div>
+              </div>
 
-                {/* Marketplace */}
-                <div className="bg-bg/60 pixel-border p-3">
-                  <span className="font-mono text-[8px] text-text-muted uppercase tracking-wider block mb-2">Marketplace</span>
-                  <p className="font-mono text-[9px] text-text-secondary">Publish as template</p>
-                  <div className="mt-1.5 w-full px-2 py-1 pixel-border text-center font-mono text-[8px] text-forge-orange/50 border-forge-orange/20">
-                    List on kazt.fun
+              {/* Right Panel: Simulation & Deploy */}
+              <div className="w-64 border-l border-wire-border bg-bg-elevated flex flex-col">
+                <div className="p-4 border-b border-wire-border">
+                  <div className="font-display text-[10px] text-text-muted uppercase tracking-wider mb-3">Simulation Engine</div>
+                  <div className="space-y-2 font-mono text-[9px]">
+                    <div className="flex justify-between text-text-secondary"><span>Processed TXs:</span><span className="text-forge-orange">1,204,551</span></div>
+                    <div className="flex justify-between text-text-secondary"><span>Filtered:</span><span className="text-crack-red">45,210</span></div>
+                    <div className="flex justify-between text-text-secondary"><span>Passed:</span><span className="text-cast-green">1,159,341</span></div>
                   </div>
+                  <button className="w-full mt-4 py-2 border border-forge-orange/50 text-forge-orange font-display text-[10px] uppercase tracking-wider hover:bg-forge-orange/10 transition-colors">
+                    Run Local Sim
+                  </button>
+                </div>
+                <div className="p-4 mt-auto border-t border-wire-border">
+                  <div className="font-display text-[10px] text-text-muted uppercase tracking-wider mb-2">Deploy Layer</div>
+                  <p className="text-[9px] text-text-muted font-mono mb-3">100% of deployment fees will be routed to $KAZT Buy & Burn.</p>
+                  <button className="w-full py-2 bg-forge-orange text-bg font-display text-[10px] uppercase tracking-wider hover:bg-forge-orange-light transition-colors">
+                    Deploy & Burn
+                  </button>
                 </div>
               </div>
             </div>
@@ -259,7 +223,7 @@ export default function AppPage() {
             className="mb-10"
           >
             <h2 className="font-display text-sm sm:text-base uppercase tracking-wider text-text-primary">
-              Features
+              Desktop Exclusives
             </h2>
           </motion.div>
 
@@ -277,11 +241,6 @@ export default function AppPage() {
                   <h3 className="font-display text-[10px] uppercase tracking-wider text-text-primary">
                     {f.title}
                   </h3>
-                  {f.beta && (
-                    <span className="font-mono text-[7px] text-molten-gold px-1.5 py-0.5 border border-molten-gold/30 bg-molten-gold/10 uppercase tracking-wider">
-                      beta
-                    </span>
-                  )}
                 </div>
                 <p className="font-mono text-[10px] text-text-secondary leading-relaxed">
                   {f.desc}
@@ -306,10 +265,10 @@ export default function AppPage() {
             className="mb-8 text-center"
           >
             <h2 className="font-display text-sm sm:text-base uppercase tracking-wider text-text-primary">
-              Download
+              Download Client
             </h2>
             <p className="mt-2 font-mono text-[10px] text-text-muted">
-              v0.1.0-beta &middot; 4GB RAM &middot; 200MB disk
+              v0.1.0-beta &middot; 8GB RAM &middot; 500MB disk recommended for local simulation
             </p>
           </motion.div>
 
@@ -339,7 +298,7 @@ export default function AppPage() {
                   </div>
                 </div>
 
-                {/* Download button — uses div so hover works, onClick blocked */}
+                {/* Download button */}
                 <div
                   role="button"
                   aria-disabled="true"
