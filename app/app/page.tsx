@@ -302,18 +302,15 @@ export default function AppPage() {
                   </div>
                 </div>
 
-                {/* Download button */}
-                <a
-                  href={p.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative w-full px-4 py-3 pixel-border font-display uppercase text-[10px] tracking-wider bg-bg/40 flex items-center justify-center gap-2 text-text-muted transition-all duration-200 hover:text-forge-orange hover:border-forge-orange/40 hover:bg-forge-orange/10 hover:shadow-[0_0_25px_rgba(249,115,22,0.15),0_4px_12px_rgba(249,115,22,0.1)] hover:-translate-y-0.5 active:translate-y-0 select-none"
+                {/* Download button — disabled until public release */}
+                <div
+                  className="relative w-full px-4 py-3 pixel-border font-display uppercase text-[10px] tracking-wider bg-bg/40 flex items-center justify-center gap-2 text-text-muted/40 cursor-not-allowed select-none"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-200 group-hover:translate-y-0.5">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-40">
                     <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
                   </svg>
-                  Download
-                </a>
+                  Coming Soon
+                </div>
               </motion.div>
             ))}
           </div>
